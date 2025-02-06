@@ -1263,12 +1263,40 @@ func int Npc_IsPlayerInMyRoom(var C_NPC npc) {};
 /// @param npc instance of the NPC
 func void Npc_PerceiveAll(var C_NPC npc) {};
 
+/// Sets the perception time of the NPC
+///
+/// @param npc instance of the NPC
+/// @param time float time in seconds
 func void Npc_SetPercTime(var C_NPC npc, var float time) {};
-func void npc_percenable(var __class par0, var int par1, var func par2) {};
-func void npc_percdisable(var __class par0, var int par1) {};
-func void npc_sendpassiveperc(var __class par0, var int par1, var __class par2, var __class par3) {};
-func void npc_sendsingleperc(var __class par0, var __class par1, var int par2) {};
 
+/// Enables the perception of the NPC
+///
+/// @param npc instance of the NPC
+/// @param percid perception ID
+/// @param function function associated with the perception
+func void Npc_PercEnable(var C_NPC npc, var int percid, var func function) {};
+
+/// Disables the perception of the NPC
+///
+/// @param npc instance of the NPC
+/// @param percid perception ID
+func void Npc_PercDisable(var C_NPC npc, var int percid) {};
+
+/// Sends a passive perception to the `slf`
+///
+/// @param slf instance of the NPC
+/// @param percid perception ID
+/// @param oth instance of the other NPC
+/// @param vic instance of the victim NPC
+func void Npc_SendPassivePerc(var C_NPC slf, var int percid, var C_NPC oth, var C_NPC vic) {};
+
+/// Sends a single perception to the `slf` (executes the perception function)
+/// Function is a bit weird, `slf` and `oth` are swapped in the function signature
+///
+/// @param oth instance of the other NPC
+/// @param slf instance of the NPC
+/// @param percid perception ID
+func void Npc_SendSinglePerc(var C_NPC oth, var C_NPC slf, var int percid) {};
 
 /// Checks if the NPC is dead
 ///
