@@ -938,13 +938,6 @@ func void Npc_ClearInventory(var C_NPC npc) {};
 /// @param spellnr int spell number
 func void Npc_CreateSpell(var C_NPC self, var int spellnr) {};
 
-/// TODO: Deletes news for the specified instance
-///
-/// @param n0 instance of the instance
-/// @param i1 int parameter
-/// @return int result
-func int Npc_DeleteNews(var instance n0, var int i1) {};
-
 /// Exchanges multiple daily routines for the NPC
 ///
 /// @param self instance of the NPC
@@ -953,9 +946,9 @@ func void Npc_ExchangeRoutine(var C_NPC self, var string routinename) {};
 
 /// Returns the active spell for the NPC (self or other)
 ///
-/// @param self instance of the NPC
-/// @return int spell ID, -1 if no active spell
-func int Npc_GetActiveSpell(var C_NPC self) {};
+/// @param npc instance of the NPC
+/// @return spell ID, -1 if no active spell
+func int Npc_GetActiveSpell(var C_NPC npc) {};
 
 /// TODO: Gets the category of the active spell for the NPC
 ///
@@ -1045,12 +1038,13 @@ func C_ITEM Npc_GetEquippedMeleeWeapon(var C_NPC n0) {};
 /// @return C_ITEM instance of the equipped ranged weapon
 func C_ITEM Npc_GetEquippedRangedWeapon(var C_NPC n0) {};
 
-/// TODO: Gets the guild attitude between two NPCs
+/// Gets the guild-based attitude between two NPCs based on their guild memberships.
+/// This represents how members of different guilds feel about each other.
 ///
-/// @param npc1 C_NPC instance of the first NPC
-/// @param npc2 C_NPC instance of the second NPC
-/// @return int guild attitude
-func int Npc_GetGuildAttitude(var C_NPC npc1, var C_NPC npc2) {};
+/// @param slf instance of the NPC whose guild attitude should be checked
+/// @param oth second NPC to check attitude against
+/// @return attitude value between the guilds of the two NPCs
+func int Npc_GetGuildAttitude(var C_NPC slf, var C_NPC oth) {};
 
 /// TODO: Gets the height difference between the NPC and an item (in cm)
 ///
@@ -1081,17 +1075,17 @@ func C_ITEM Npc_GetInvItem(var C_NPC self, var int iteminstance) {};
 /// @return int number of items in the slot
 func int Npc_GetInvItemBySlot(var C_NPC self, var int category, var int slotnr) {};
 
-/// TODO: Gets the category of the last hit spell on the NPC
+/// Gets the category of the last spell that hit/affected this NPC.
 ///
-/// @param self instance of the NPC
-/// @return int spell category
-func int Npc_GetLastHitSpellCat(var C_NPC self) {};
+/// @param npc instance of the NPC to check spell category for
+/// @return category ID of the last spell that hit the NPC
+func int Npc_GetLastHitSpellCat(var C_NPC npc) {};
 
-/// TODO: Gets the ID of the last hit spell on the NPC
+/// Gets the ID of the last spell that hit/affected this NPC.
 ///
-/// @param self instance of the NPC
-/// @return int spell ID
-func int Npc_GetLastHitSpellID(var C_NPC self) {};
+/// @param npc instance of the NPC to check spell hits for
+/// @return ID of the last spell that hit the NPC, returns spell number that can be matched against spell definitions
+func int Npc_GetLastHitSpellID(var C_NPC npc) {};
 
 /// TODO: Gets the target the NPC is looking at
 ///
@@ -1673,3 +1667,62 @@ func void Wld_SetTime(var int hour, var int min) {};
 /// @param num number of NPCs to spawn
 /// @param range spawn range in cm
 func void Wld_SpawnNpcRange(var C_NPC npc, var int instancename, var int num, var float range) {};
+
+/// [deprecated] Not used in the original scripts, the idea was that it created a news/memory entry that allows NPCs to track and react to witnessed events.
+/// NPCs to "remember" and react to events later.
+///
+/// @param witness instance of the NPC who will receive this memory
+/// @param source type of the news/event
+/// @param offender instance of the NPC who performed the action
+/// @param newsid ID of the event type
+/// @param vic instance of the NPC affected by the action (victim)
+func void Npc_MemoryEntry(var C_NPC witness, var int source, var C_NPC offender, var int newsid, var C_NPC vic) {};
+
+/// [deprecated] Not used in the original scripts, creates a guild-related news/memory entry that allows NPCs to track and react to witnessed events.
+/// Similar to Npc_MemoryEntry() but marks the news as guild-related, meaning it affects
+/// guild attitudes and reactions rather than just individual NPCs.
+///
+/// @param witness instance of the NPC who will receive this memory 
+/// @param source type of the news/event
+/// @param offender instance of the NPC who performed the action
+/// @param newsid ID of the event type
+/// @param vic instance of the NPC affected by the action (victim)
+func void Npc_MemoryEntryGuild(var C_NPC witness, var int source, var C_NPC offender, var int newsid, var C_NPC vic) {};
+
+/// [deprecated] Not used in the original scripts, checks if NPC has a specific news entry in their memory.
+/// @param slf NPC to check
+/// @param newsID ID of the news to find
+/// @param offender optional (can be NULL) offender to match
+/// @param vic optional (can be NULL) victim to match
+/// @return news number >0 if found, 0 if not found
+func int Npc_HasNews(var C_NPC slf, var int newsID, var C_NPC offender, var C_NPC vic) {};
+
+/// [deprecated] Not used in the original scripts, checks if a specific news entry is gossip (heard from others) vs witnessed.
+/// @param npc NPC owning the news
+/// @param newsNumber ID number of the news entry to check
+/// @return >0 if news is gossip, 0 if directly witnessed
+func int Npc_IsNewsGossip(var C_NPC npc, var int newsNumber) {};
+
+/// [deprecated] Not used in the original scripts, gets the NPC who witnessed the specified news event.
+/// @param npc NPC owning the news
+/// @param newsNumber ID number of the news entry
+/// @return C_NPC instance of the witness
+func C_NPC Npc_GetNewsWitness(var C_NPC npc, var int newsNumber) {};
+
+/// [deprecated] Not used in the original scripts, gets the victim of the specified news event.
+/// @param npc NPC owning the news
+/// @param newsNumber ID number of the news entry
+/// @return C_NPC instance of the victim
+func C_NPC Npc_GetNewsVictim(var C_NPC npc, var int newsNumber) {};
+
+/// [deprecated] Not used in the original scripts, gets the offender from the specified news event.
+/// @param npc NPC owning the news
+/// @param newsNumber ID number of the news entry
+/// @return C_NPC instance of the offender
+func C_NPC Npc_GetNewsOffender(var C_NPC npc, var int newsNumber) {};
+
+/// [deprecated] Not used in the original scripts, deletes a specific news entry from an NPC's memory.
+/// @param npc NPC whose news entry should be deleted
+/// @param newsNumber ID number of the news entry to delete
+/// @return TRUE if the news was successfully deleted, FALSE otherwise
+func int Npc_DeleteNews(var C_NPC npc, var int newsNumber) {};
