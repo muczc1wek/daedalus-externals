@@ -950,29 +950,43 @@ func void Npc_ExchangeRoutine(var C_NPC self, var string routinename) {};
 /// @return spell ID, -1 if no active spell
 func int Npc_GetActiveSpell(var C_NPC npc) {};
 
-/// TODO: Gets the category of the active spell for the NPC
+/// Gets the category/type of the spell that the NPC currently has active
 ///
-/// @param self instance of the NPC
-/// @return int spell category
-func int Npc_GetActiveSpellCat(var C_NPC self) {};
+/// @param npc instance of the NPC to check
+/// @return category ID of the currently active spell
+func int Npc_GetActiveSpellCat(var C_NPC npc) {};
 
-/// TODO: Checks if the active spell is a scroll
+/// Checks if the spell currently active on the NPC's hand is from a scroll
 ///
-/// @param n0 instance of the NPC
-/// @return int result
-func int Npc_GetActiveSpellIsScroll(var instance n0) {};
+/// @param npc instance of the NPC to check
+/// @return TRUE if active spell is from a scroll, FALSE otherwise
+func int Npc_GetActiveSpellIsScroll(var C_NPC npc) {};
 
-/// TODO: Gets the level of the active spell for the NPC
+/// [deprecated] Not used in the original scripts, gets the level of the spell currently active on the NPC's hand
+/// although it is unknown what 'level' means
 ///
-/// @param self instance of the NPC
-/// @return int spell level
-func int Npc_GetActiveSpellLevel(var C_NPC self) {};
+/// @param npc instance of the NPC to check
+/// @return level of the active spell
+func int Npc_GetActiveSpellLevel(var C_NPC npc) {};
+
+/// [deprecated] Sets some kind of spell info. Purpose is unclear.
+/// The name suggests it sets some properties for the active spell, but actual usage is not found in scripts.
+/// There are some remainings in the transformation spells.
+/// Based on engine code, it always returns FALSE.
+///
+/// @param npc instance of the NPC
+/// @param value unknown purpose
+/// @return always FALSE
+func int Npc_SetActiveSpellInfo(var C_NPC npc, var int value) {};
 
 /// Gets the attitude of the NPC to another NPC (temp, perm, guild)
 ///
 /// @param self instance of the NPC
 /// @param other C_NPC instance of the other NPC
 /// @return int attitude value
+
+
+
 func int Npc_GetAttitude(var C_NPC self, var C_NPC other) {};
 
 /// TODO: Gets the body state of the NPC (returns BS_ constants)
