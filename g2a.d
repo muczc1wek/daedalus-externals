@@ -1,3 +1,7 @@
+// Vanilla G2A externals with docu comments for DLS implementation
+//
+// Source: https://github.com/muczc1wek/daedalus-externals
+
 var C_NPC hero;
 var C_NPC self;
 var C_NPC other;
@@ -28,6 +32,9 @@ func void AI_Ask(var C_NPC npc, var func anseryes, var func answerno) {};
 /// [deprecated] Probably relic of the old dialog system
 func void AI_AskText(var C_NPC npc, var func funcyes, var func funcno, var string stryes, var string strno) {};
 
+/// [deprecated] Probably relic of the old dialog system
+func void AI_WaitForQuestion(var C_NPC npc, var func scriptfunc) {};
+
 /// Starts the combat AI (should be called in the ZS_Attack loop)
 /// Uses the internal target ised in `Npc_SetTarget()` and `Npc_GetNextTarget()`
 ///
@@ -49,9 +56,8 @@ func void AI_CombatReactToDamage(var instance n0) {};
 ///
 /// @param npc instance of the NPC
 func void AI_ContinueRoutine(var C_NPC npc) {};
-
-/// TODO: The command is implemented as an overlay message. This means that it remains active alongside other messages.
-/// It ends only when the NPC performs a parry triggered by another NPC's attack.
+ 
+/// Adds overlay message (`EV_DEFEND`) that ends when the NPC performs a parry triggered by another NPC's attack.
 ///
 /// @param npc instance of the NPC
 func void AI_Defend(var C_NPC npc) {};
@@ -71,11 +77,6 @@ func void AI_DrawWeapon(var C_NPC npc) {};
 /// @param npc instance of the NPC
 /// @param itemid int ID of the item to be dropped
 func void AI_DropItem(var C_NPC npc, var int itemid) {};
-
-/// TODO: Drops a mobile object
-///
-/// @param n0 instance of the NPC
-func void AI_DropMob(var instance n0) {};
 
 /// Equips armor from the inventory
 ///
@@ -157,12 +158,6 @@ func void AI_LookAt(var C_NPC npc, var string name) {};
 /// @param oth instance of the other NPC
 func void AI_LookAtNpc(var C_NPC slf, var C_NPC oth) {};
 
-/// TODO: Searches for a specific item (e.g., the golden sword of destruction, if available)
-///
-/// @param self instance of the NPC
-/// @param instance int instance ID of the item
-func void AI_LookForItem(var C_NPC self, var int instance) {};
-
 /// Makes `slf` say a line of text to `oth`
 /// The actual text is defined by the comment after the function call
 ///
@@ -206,12 +201,18 @@ func void AI_PlayAniBS(var C_NPC npc, var string aniname, var int bodystate) {};
 /// @param csname string name of the cutscene
 func void AI_PlayCutscene(var C_NPC npc, var string csname) {};
 
-/// TODO: Plays a special effect
+/// Plays a visual effect (VFX)
 ///
-/// @param n0 instance of the NPC
-/// @param n1 instance of the target NPC or object
-/// @param s2 string name of the special effect
-func void AI_PlayFX(var instance n0, var instance n1, var string s2) {};
+/// @param origin NPC who is the effect origin and also to whose AI queue the function is added
+/// @param target instance of the effect target object
+/// @param effect name of the visual effect
+func void AI_PlayFX(var C_NPC origin, var instance target, var string effect) {};
+
+/// Stops a visual effect (VFX)
+///
+/// @param npc instance of the NPC
+/// @param effect name of the visual effect
+func void AI_StopFX(var C_NPC npc, var string s1) {};
 
 /// Points to a waypoint (provide waypoint name) or another object (provide object name)
 ///
@@ -248,20 +249,25 @@ func void AI_Quicklook(var C_NPC slf, var C_NPC oth) {};
 
 /// Draws the equipped melee weapon
 ///
-/// @param self instance of the NPC
-func void AI_ReadyMeleeWeapon(var C_NPC self) {};
+/// @param npc instance of the NPC
+func void AI_ReadyMeleeWeapon(var C_NPC npc) {};
 
 /// Draws the equipped ranged weapon
 ///
-/// @param self instance of the NPC
-func void AI_ReadyRangedWeapon(var C_NPC self) {};
+/// @param npc instance of the NPC
+func void AI_ReadyRangedWeapon(var C_NPC npc) {};
 
 /// Readies a spell
 ///
-/// @param self instance of the NPC
-/// @param spellid int ID of the spell
-/// @param investmana int amount of mana to invest
-func void AI_ReadySpell(var C_NPC self, var int spellid, var int investmana) {};
+/// @param npc instance of the NPC
+/// @param spellid ID of the spell
+/// @param investmana amount of mana to invest
+func void AI_ReadySpell(var C_NPC npc, var int spellid, var int investmana) {};
+
+/// Unreadies a spell
+///
+/// @param npc instance of the NPC
+func void AI_UnreadySpell(var C_NPC npc) {};
 
 /// Puts away the drawn weapon
 ///
@@ -281,10 +287,10 @@ func void AI_SetNpcsToState(var C_NPC self, var func aistatefunc, var int radius
 /// @param mode walk mode
 func void AI_SetWalkmode(var C_NPC npc, var int mode) {};
 
-/// TODO: Shoots at the target with a ranged weapon
+/// Shoots at the target with a ranged weapon
 ///
-/// @param attacker C_NPC instance of the attacker
-/// @param target C_NPC instance of the target
+/// @param attacker instance of the attacker NPC
+/// @param target instance of the target NPC
 func void AI_ShootAt(var C_NPC attacker, var C_NPC target) {};
 
 /// Plays a sound (queued)
@@ -319,16 +325,10 @@ func void AI_StandUpQuick(var C_NPC self) {};
 /// @param wpname name of the waypoint to do the action at
 func void AI_StartState(var C_NPC npc, var func state, var int statebehaviour, var string wpname) {};
 
-/// TODO: Stops aiming with a ranged weapon
+/// Makes the NPC stop aiming at the target
 ///
-/// @param attacker C_NPC instance of the attacker
-func void AI_StopAim(var C_NPC attacker) {};
-
-/// TODO: Stops a special effect
-///
-/// @param n0 instance of the NPC
-/// @param s1 string name of the special effect
-func void AI_StopFX(var instance n0, var string s1) {};
+/// @param npc instance of the NPC
+func void AI_StopAim(var C_NPC npc) {};
 
 /// Stops looking at a target and returns to the default forward gaze
 ///
@@ -351,11 +351,11 @@ func void AI_StopProcessInfos(var C_NPC npc) {};
 /// @param item C_ITEM instance of the item
 func void AI_TakeItem(var C_NPC self, var C_ITEM item) {};
 
-/// TODO: Takes control of a mobile object
-///
-/// @param n0 instance of the NPC
-/// @param s1 string name of the mobile object
-func void AI_TakeMob(var instance n0, var string s1) {};
+/// [deprecated] Relic of the mob carrying system
+func void AI_TakeMob(var C_NPC npc, var string mobname) {};
+
+/// [deprecated] Relic of the mob carrying system
+func void AI_DropMob(var C_NPC npc) {};
 
 /// Teleports the NPC to the specified location
 ///
@@ -390,46 +390,33 @@ func void AI_UnequipArmor(var C_NPC npc) {};
 /// @param npc instance of the NPC
 func void AI_UnequipWeapons(var C_NPC npc) {};
 
-/// TODO: Readies a spell
+/// Makes the NPC use an item to the end of its use state
 ///
-/// @param self instance of the NPC
-/// @param spellid int ID of the spell
-/// @param investmana int amount of mana to invest
-func void AI_UnreadySpell(var C_NPC self) {};
+/// @param npc instance of the NPC
+/// @param iteminstance name of the item instance
+func void AI_UseItem(var C_NPC npc, var int iteminstance) {};
 
-/// Uses an item until it is fully consumed
+/// Makes the NPC use an item until it reaches the target state
 ///
-/// @param self instance of the NPC
-/// @param iteminstance int instance ID of the item
-func void AI_UseItem(var C_NPC self, var int iteminstance) {};
+/// @param npc instance of the NPC
+/// @param iteminstance name of the item instance
+/// @param state target state (1 for S1 etc. -1 to end the action)
+func void AI_UseItemToState(var C_NPC npc, var int iteminstance, var int state) {};
 
-/// Uses an item until it reaches the specified state
-///
-/// @param self instance of the NPC
-/// @param iteminstance int instance ID of the item
-/// @param state int target state
-func void AI_UseItemToState(var C_NPC self, var int iteminstance, var int state) {};
-
-/// Uses a mobile object with the specified schema name until it reaches the target state
+/// Uses an intetactive object with the specified schema name until it reaches the target state
 /// If the target state is already present, the NPC will move to the MOB but do nothing
 ///
-/// @param self instance of the NPC
-/// @param schemename string name of the schema
-/// @param targetstate int target state
-/// @return int 0 if the target state is already present, 1 otherwise
-func int AI_UseMob(var C_NPC self, var string schemename, var int targetstate) {};
+/// @param npc instance of the NPC
+/// @param schemename name of the schema (e.g. `BENCH`)
+/// @param targetstate target state  (1 for S1 etc. -1 to end the action)
+/// @return TRUE if the mob was used, FALSE otherwise
+func int AI_UseMob(var C_NPC npc, var string schemename, var int targetstate) {};
 
 /// Makes NPC wait for a specified number of seconds
 ///
 /// @param npc instance of the NPC
 /// @param timesec float number of seconds to wait
 func void AI_Wait(var C_NPC npc, var float timesec) {};
-
-/// TODO: The NPC waits for 20 seconds. If the player interacts with the NPC during this time, the specified script function will be executed
-///
-/// @param self instance of the NPC
-/// @param scriptfunc function to execute if the player interacts with the NPC
-func void AI_WaitForQuestion(var C_NPC self, var func scriptfunc) {};
 
 /// Makes NPC wait for a specified number of milliseconds
 ///
@@ -886,13 +873,14 @@ func int Npc_CanSeeSource(var C_NPC self) {};
 /// @param value int value to change by
 func void Npc_ChangeAttribute(var C_NPC self, var int atr, var int value) {};
 
-/// TODO: Checks if the NPC has an active mission and if its status matches the specified state
-///
-/// @param npc instance of the NPC
-/// @param missionstate int state of the mission
-/// @param important int importance level
-/// @return int 1 if status matches, 0 if not
+/// [deprecated] Relic of the old mission system
 func int Npc_CheckAvailableMission(var C_NPC npc, var int missionstate, var int important) {};
+
+/// [deprecated] Relic of the old mission system
+func int Npc_CheckOfferMission(var C_NPC npc, var int important) {};
+
+/// [deprecated] Relic of the old mission system
+func int Npc_CheckRunningMission(var C_NPC npc, var int important) {};
 
 /// Checks if the NPC has valid information (C_INFO) for the player
 ///
@@ -907,20 +895,6 @@ func int Npc_CheckInfo(var C_NPC npc, var int important) {};
 /// @param infoinstance C_INFO instance name
 /// @return TRUE if the NPC knows the info, FALSE otherwise
 func int Npc_KnowsInfo(var C_NPC npc, var int infoinstance) {};
-
-/// TODO: Checks if the NPC can offer a mission to the player
-///
-/// @param npc instance of the NPC
-/// @param important int importance level
-/// @return int 1 if mission can be offered, 0 if not
-func int Npc_CheckOfferMission(var C_NPC npc, var int important) {};
-
-/// TODO: Checks if the NPC has a running mission with the player and starts the corresponding script block
-///
-/// @param npc instance of the NPC
-/// @param important int importance level
-/// @return int 1 if mission is active, 0 if not
-func int Npc_CheckRunningMission(var C_NPC npc, var int important) {};
 
 /// Clears the AI queue of the NPC
 ///
@@ -937,6 +911,13 @@ func void Npc_ClearInventory(var C_NPC npc) {};
 /// @param self instance of the NPC
 /// @param spellnr int spell number
 func void Npc_CreateSpell(var C_NPC self, var int spellnr) {};
+
+/// Checks if the NPC has a specified spell in inventory
+///
+/// @param npc instance of the NPC
+/// @param spellid ID of the spell
+/// @return TRUE if the NPC has the spell, FALSE otherwise
+func int Npc_HasSpell(var C_NPC npc, var int spellid) {};
 
 /// Exchanges multiple daily routines for the NPC
 ///
@@ -976,24 +957,24 @@ func int Npc_GetActiveSpellLevel(var C_NPC npc) {};
 /// @return nothing, external is wrongly defined as int
 func int Npc_SetActiveSpellInfo(var C_NPC npc, var int instancename) {};
 
-/// Gets the attitude of the NPC to another NPC (temp, perm, guild)
+/// Gets the attitude of the `slf` towards the `oth`
 ///
-/// @param self instance of the NPC
-/// @param other C_NPC instance of the other NPC
-/// @return int attitude value
-func int Npc_GetAttitude(var C_NPC self, var C_NPC other) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @return attitude value as ATT_ constants
+func int Npc_GetAttitude(var C_NPC slf, var C_NPC oth) {};
 
-/// TODO: Gets the body state of the NPC (returns BS_ constants)
+/// Gets the body state of the NPC (returns BS_ constants)
 ///
-/// @param self instance of the NPC
-/// @return int body state
-func int Npc_GetBodyState(var C_NPC self) {};
+/// @param npc instance of the NPC
+/// @return current body state
+func int Npc_GetBodyState(var C_NPC npc) {};
 
-/// TODO: Gets the comrades of the NPC
+/// Gets the number of NPCs with the same guild as `npc` within `PERC_ASSESSENEMY` range
 ///
-/// @param n0 instance of the NPC
-/// @return int result
-func int Npc_GetComrades(var instance n0) {};
+/// @param npc instance of the NPC
+/// @return number of NPCs with the same guild within range
+func int Npc_GetComrades(var C_NPC npc) {};
 
 /// TODO: Gets the schema name of the MOB detected by the NPC
 ///
@@ -1030,21 +1011,21 @@ func int Npc_GetDistToWP(var C_NPC self, var string wpname) {};
 
 /// Gets the equipped armor of the NPC
 ///
-/// @param n0 instance of the NPC
-/// @return C_ITEM instance of the equipped armor
-func C_ITEM Npc_GetEquippedArmor(var C_NPC n0) {};
+/// @param npc instance of the NPC
+/// @return C_ITEM instance of the equipped armor, NULL if no armor
+func C_ITEM Npc_GetEquippedArmor(var C_NPC npc) {};
 
 /// Gets the equipped melee weapon of the NPC
 ///
-/// @param n0 instance of the NPC
-/// @return C_ITEM instance of the equipped melee weapon
-func C_ITEM Npc_GetEquippedMeleeWeapon(var C_NPC n0) {};
+/// @param npc instance of the NPC
+/// @return C_ITEM instance of the equipped melee weapon, NULL if no weapon
+func C_ITEM Npc_GetEquippedMeleeWeapon(var C_NPC npc) {};
 
 /// Gets the equipped ranged weapon of the NPC
 ///
-/// @param n0 instance of the NPC
-/// @return C_ITEM instance of the equipped ranged weapon
-func C_ITEM Npc_GetEquippedRangedWeapon(var C_NPC n0) {};
+/// @param npc instance of the NPC
+/// @return C_ITEM instance of the equipped ranged weapon, NULL if no weapon
+func C_ITEM Npc_GetEquippedRangedWeapon(var C_NPC npc) {};
 
 /// Gets the guild-based attitude between two NPCs based on their guild memberships.
 /// This represents how members of different guilds feel about each other.
@@ -1161,9 +1142,9 @@ func C_NPC Npc_GetPortalOwner(var C_NPC npc) {};
 
 /// Gets the readied weapon of the NPC
 ///
-/// @param n0 instance of the NPC
-/// @return C_ITEM instance of the readied weapon
-func C_ITEM Npc_GetReadiedWeapon(var C_NPC n0) {};
+/// @param npc instance of the NPC
+/// @return C_ITEM instance of the readied weapon, NULL if no weapon
+func C_ITEM Npc_GetReadiedWeapon(var C_NPC npc) {};
 
 /// Gets the state time of the NPC
 ///
@@ -1265,6 +1246,103 @@ func int Npc_IsInPlayersRoom(var C_NPC npc) {};
 /// @param npc instance of the NPC
 /// @return TRUE if the player is in the room assigned to the NPC, FALSE otherwise
 func int Npc_IsPlayerInMyRoom(var C_NPC npc) {};
+
+/// Checks if the NPC is drawing a weapon or spell, but by the `oCMsgWeapon` and `oCMsgMagic` events. Not sure if it works
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC is drawing a weapon, FALSE otherwise
+func int Npc_IsDrawingWeapon(var C_NPC npc) {};
+
+/// Checks if the NPC is drawing a spell, but by the `oCMsgMagic` events. Not sure if it works
+///
+/// @param npc instance of the NPC
+/// @return spell ID if the NPC is drawing a spell, -1 otherwise
+func int Npc_IsDrawingSpell(var C_NPC npc) {};
+
+/// Checks if the NPC refuses to talk
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC refuses to talk, FALSE otherwise
+func int Npc_RefuseTalk(var C_NPC npc) {};
+
+/// Sets the NPC to refuse to talk for a specified time
+///
+/// @param npc instance of the NPC
+/// @param timesec time in seconds
+func void Npc_SetRefuseTalk(var C_NPC npc, var int timesec) {};
+
+/// [deprecated] Not used in the original scripts, the idea was that it created a news/memory entry that allows NPCs to track and react to witnessed events.
+/// NPCs to "remember" and react to events later.
+///
+/// @param witness instance of the NPC who will receive this memory
+/// @param source type of the news/event
+/// @param offender instance of the NPC who performed the action
+/// @param newsid ID of the event type
+/// @param vic instance of the NPC affected by the action (victim)
+func void Npc_MemoryEntry(var C_NPC witness, var int source, var C_NPC offender, var int newsid, var C_NPC vic) {};
+
+/// [deprecated] Not used in the original scripts, creates a guild-related news/memory entry that allows NPCs to track and react to witnessed events.
+/// Similar to Npc_MemoryEntry() but marks the news as guild-related, meaning it affects
+/// guild attitudes and reactions rather than just individual NPCs.
+///
+/// @param witness instance of the NPC who will receive this memory 
+/// @param source type of the news/event
+/// @param offender instance of the NPC who performed the action
+/// @param newsid ID of the event type
+/// @param vic instance of the NPC affected by the action (victim)
+func void Npc_MemoryEntryGuild(var C_NPC witness, var int source, var C_NPC offender, var int newsid, var C_NPC vic) {};
+
+/// [deprecated] Not used in the original scripts, checks if NPC has a specific news entry in their memory.
+/// @param slf NPC to check
+/// @param newsID ID of the news to find
+/// @param offender optional (can be NULL) offender to match
+/// @param vic optional (can be NULL) victim to match
+/// @return news number >0 if found, 0 if not found
+func int Npc_HasNews(var C_NPC slf, var int newsID, var C_NPC offender, var C_NPC vic) {};
+
+/// [deprecated] Not used in the original scripts, checks if a specific news entry is gossip (heard from others) vs witnessed.
+/// @param npc NPC owning the news
+/// @param newsNumber ID number of the news entry to check
+/// @return >0 if news is gossip, 0 if directly witnessed
+func int Npc_IsNewsGossip(var C_NPC npc, var int newsNumber) {};
+
+/// [deprecated] Not used in the original scripts, gets the NPC who witnessed the specified news event.
+/// @param npc NPC owning the news
+/// @param newsNumber ID number of the news entry
+/// @return C_NPC instance of the witness
+func C_NPC Npc_GetNewsWitness(var C_NPC npc, var int newsNumber) {};
+
+/// [deprecated] Not used in the original scripts, gets the victim of the specified news event.
+/// @param npc NPC owning the news
+/// @param newsNumber ID number of the news entry
+/// @return C_NPC instance of the victim
+func C_NPC Npc_GetNewsVictim(var C_NPC npc, var int newsNumber) {};
+
+/// [deprecated] Not used in the original scripts, gets the offender from the specified news event.
+/// @param npc NPC owning the news
+/// @param newsNumber ID number of the news entry
+/// @return C_NPC instance of the offender
+func C_NPC Npc_GetNewsOffender(var C_NPC npc, var int newsNumber) {};
+
+/// [deprecated] Not used in the original scripts, deletes a specific news entry from an NPC's memory.
+/// @param npc NPC whose news entry should be deleted
+/// @param newsNumber ID number of the news entry to delete
+/// @return TRUE if the news was successfully deleted, FALSE otherwise
+func int Npc_DeleteNews(var C_NPC npc, var int newsNumber) {};
+
+/// Checks if `itm` is owned by the NPC
+///
+/// @param itm instance of the item
+/// @param npc instance of the NPC
+/// @return TRUE if the item is owned by the NPC, FALSE otherwise
+func int Npc_OwnedByNpc(var C_ITEM itm, var C_NPC npc) {};
+
+/// Checks if `itm` is owned by the guild
+///
+/// @param itm instance of the item
+/// @param guild int guild ID
+/// @return TRUE if the item is owned by the guild, FALSE otherwise
+func int Npc_OwnedByGuild(var C_ITEM itm, var int guild) {};
 
 /// Makes the NPC perceive all objects in the sense range
 ///
@@ -1434,23 +1512,6 @@ func void Snd_Play3D(var C_NPC npc, var string sndName) {};
 /// @param waypoint name of the waypoint
 func void TA(var C_NPC npc, var int start_h, var int stop_h, var func state, var string waypoint) {};
 
-/// TODO: Registers an overlay daily routine for the NPC
-///
-/// @param self instance of the NPC
-func void TA_BeginOverlay(var C_NPC self) {};
-
-/// TODO: Attaches a cutscene to the specified daily routine point
-///
-/// @param self instance of the NPC
-/// @param csname string name of the cutscene
-/// @param rolename string name of the role
-func void TA_CS(var C_NPC self, var string csname, var string rolename) {};
-
-/// TODO: Ends an overlay daily routine for the NPC
-///
-/// @param self instance of the NPC
-func void TA_EndOverlay(var C_NPC self) {};
-
 /// Sets the NPC daily routine with minute precision
 ///
 /// @param npc instance of the NPC
@@ -1462,12 +1523,30 @@ func void TA_EndOverlay(var C_NPC self) {};
 /// @param waypoint name of the waypoint
 func void TA_Min(var C_NPC npc, var int start_h, var int start_m, var int stop_h, var int stop_m, var func state, var string waypoint) {};
 
-/// TODO: Removes an active overlay daily routine for the NPC
+/// [deprecated] Relic of the cutscene system
+/// Sets a cutscene routine for the NPC
+///
+/// @param npc instance of the NPC
+/// @param csname name of the cutscene
+/// @param rolename role of the NPC in the cutscene
+func void TA_CS(var C_NPC npc, var string csname, var string rolename) {};
+
+/// [deprecated] Not used in the original scripts, starts a daily routine overlay
+///
+/// @param npc instance of the NPC
+func void TA_BeginOverlay(var C_NPC npc) {};
+
+/// [deprecated] Not used in the original scripts, ends a daily routine overlay
+///
+/// @param npc instance of the NPC
+func void TA_EndOverlay(var C_NPC npc) {};
+
+/// [deprecated] Not used in the original scripts, removes an active daily routine overlay
 ///
 /// @param self instance of the NPC
 func void TA_RemoveOverlay(var C_NPC self) {};
 
-/// deprecated
+/// [deprecated] Relic of the old talent system
 func void Tal_Configure(var int i0, var int i1) {};
 
 /// Assigns a room to a guild
@@ -1525,10 +1604,10 @@ func int Wld_DetectNpcExAtt(var instance n0, var int i1, var func f2, var int i3
 /// @return int 1 if player is near, 0 if not
 func int Wld_DetectPlayer(var C_NPC self) {};
 
-/// TODO: Exchanges the guild attitude table
+/// Exchanges the guild attitude table
 ///
-/// @param name string name of the attitude table
-func void Wld_ExchangeGuildAttitudes(var string name) {};
+/// @param tablename name of the new attitude table
+func void Wld_ExchangeGuildAttitudes(var string tablename) {};
 
 /// Gets the current day, start day is 0
 ///
@@ -1567,18 +1646,18 @@ func void Wld_InsertItem(var int iteminstance, var string spawnpoint) {};
 /// @param spawnpoint name of the spawn point (waypoint or object)
 func void Wld_InsertNpc(var int npcinstance, var string spawnpoint) {};
 
-/// TODO: Inserts an NPC into the world and sets a respawn delay
+/// Inserts an NPC into the world and sets a respawn delay, if the NPC dies it will respawn after the specified delay
 ///
-/// @param instance int instance ID of the NPC
-/// @param spawnpoint string name of the spawn point
-/// @param spawndelay float respawn delay in seconds
-func void Wld_InsertNpcAndRespawn(var int instance, var string spawnpoint, var float spawndelay) {};
+/// @param instancename instance name of the NPC
+/// @param spawnpoint name of the spawn point (waypoint or object)
+/// @param spawndelay spawn delay in game hours
+func void Wld_InsertNpcAndRespawn(var int instancename, var string spawnpoint, var int spawndelay) {};
 
-/// TODO: Inserts an object into the world
+/// Inserts an `oCMob` with specified visual into the world at the specified spawn point
 ///
-/// @param s0 string name of the object
-/// @param s1 string name of the spawn point
-func void Wld_InsertObject(var string s0, var string s1) {};
+/// @param visual name of the visual (with the extension)
+/// @param spawnpoint name of the spawn point (waypoint or object)
+func void Wld_InsertObject(var string visual, var string spawnpoint) {};
 
 /// Checks if a free point is available within 20 meters of the NPC and is visible
 ///
@@ -1645,11 +1724,11 @@ func void Wld_PlayEffect(var string effect, var instance origin, var instance ta
 /// @param effect name of the visual effect
 func void Wld_StopEffect(var string effect) {};
 
-/// TODO: Removes an item from the world
+/// Removes a specific item object from the world
 ///
-/// @param item C_ITEM instance of the item
-/// @return int result
-func int Wld_RemoveItem(var C_ITEM item) {};
+/// @param itm C_ITEM instance of the item
+/// @return TRUE if the item was removed, FALSE otherwise
+func int Wld_RemoveItem(var C_ITEM itm) {};
 
 /// Removes an NPC from the game world
 ///
@@ -1658,12 +1737,12 @@ func void Wld_RemoveNpc(var int instancename) {};
 
 /// Sends a trigger message to the specified VOB
 ///
-/// @param vobname string name of the VOB
+/// @param vobname name of the VOB
 func void Wld_SendTrigger(var string vobname) {};
 
-/// TODO: Sends an untrigger message to the specified VOB
+/// Sends an untrigger message to the specified VOB
 ///
-/// @param vobname string name of the VOB
+/// @param vobname name of the VOB
 func void Wld_SendUntrigger(var string vobname) {};
 
 /// Sets the guild attitude to a specified value
@@ -1673,20 +1752,20 @@ func void Wld_SendUntrigger(var string vobname) {};
 /// @param guild2 int ID of the second guild
 func void Wld_SetGuildAttitude(var int guild1, var int attitude, var int guild2) {};
 
-/// TODO: Triggers all MOBs with the specified schema name
+/// Sets a daily routine for the object, the Trigger/Untrigger message is sent if it is later than the specified time
 ///
-/// @param hour1 int start hour
-/// @param min1 int start minute
-/// @param objname string name of the object
-/// @param state int state of the object
+/// @param hour1 start hour
+/// @param min1 start minute
+/// @param objname name of the object
+/// @param state 1 for Trigger, 0 for Untrigger
 func void Wld_SetMobRoutine(var int hour1, var int min1, var string objname, var int state) {};
 
-/// TODO: Triggers a specific object with the specified VOB name
+/// Sets a daily routine for the object, the Trigger/Untrigger message is sent if it is later than the specified time
 ///
-/// @param hour1 int start hour
-/// @param min1 int start minute
-/// @param objname string name of the object
-/// @param state int state of the object
+/// @param hour1 start hour
+/// @param min1 start minute
+/// @param objname name of the object
+/// @param state 1 for Trigger, 0 for Untrigger
 func void Wld_SetObjectRoutine(var int hour1, var int min1, var string objname, var int state) {};
 
 /// Sets the world time to the specified hour and minute
@@ -1702,62 +1781,3 @@ func void Wld_SetTime(var int hour, var int min) {};
 /// @param num number of NPCs to spawn
 /// @param range spawn range in cm
 func void Wld_SpawnNpcRange(var C_NPC npc, var int instancename, var int num, var float range) {};
-
-/// [deprecated] Not used in the original scripts, the idea was that it created a news/memory entry that allows NPCs to track and react to witnessed events.
-/// NPCs to "remember" and react to events later.
-///
-/// @param witness instance of the NPC who will receive this memory
-/// @param source type of the news/event
-/// @param offender instance of the NPC who performed the action
-/// @param newsid ID of the event type
-/// @param vic instance of the NPC affected by the action (victim)
-func void Npc_MemoryEntry(var C_NPC witness, var int source, var C_NPC offender, var int newsid, var C_NPC vic) {};
-
-/// [deprecated] Not used in the original scripts, creates a guild-related news/memory entry that allows NPCs to track and react to witnessed events.
-/// Similar to Npc_MemoryEntry() but marks the news as guild-related, meaning it affects
-/// guild attitudes and reactions rather than just individual NPCs.
-///
-/// @param witness instance of the NPC who will receive this memory 
-/// @param source type of the news/event
-/// @param offender instance of the NPC who performed the action
-/// @param newsid ID of the event type
-/// @param vic instance of the NPC affected by the action (victim)
-func void Npc_MemoryEntryGuild(var C_NPC witness, var int source, var C_NPC offender, var int newsid, var C_NPC vic) {};
-
-/// [deprecated] Not used in the original scripts, checks if NPC has a specific news entry in their memory.
-/// @param slf NPC to check
-/// @param newsID ID of the news to find
-/// @param offender optional (can be NULL) offender to match
-/// @param vic optional (can be NULL) victim to match
-/// @return news number >0 if found, 0 if not found
-func int Npc_HasNews(var C_NPC slf, var int newsID, var C_NPC offender, var C_NPC vic) {};
-
-/// [deprecated] Not used in the original scripts, checks if a specific news entry is gossip (heard from others) vs witnessed.
-/// @param npc NPC owning the news
-/// @param newsNumber ID number of the news entry to check
-/// @return >0 if news is gossip, 0 if directly witnessed
-func int Npc_IsNewsGossip(var C_NPC npc, var int newsNumber) {};
-
-/// [deprecated] Not used in the original scripts, gets the NPC who witnessed the specified news event.
-/// @param npc NPC owning the news
-/// @param newsNumber ID number of the news entry
-/// @return C_NPC instance of the witness
-func C_NPC Npc_GetNewsWitness(var C_NPC npc, var int newsNumber) {};
-
-/// [deprecated] Not used in the original scripts, gets the victim of the specified news event.
-/// @param npc NPC owning the news
-/// @param newsNumber ID number of the news entry
-/// @return C_NPC instance of the victim
-func C_NPC Npc_GetNewsVictim(var C_NPC npc, var int newsNumber) {};
-
-/// [deprecated] Not used in the original scripts, gets the offender from the specified news event.
-/// @param npc NPC owning the news
-/// @param newsNumber ID number of the news entry
-/// @return C_NPC instance of the offender
-func C_NPC Npc_GetNewsOffender(var C_NPC npc, var int newsNumber) {};
-
-/// [deprecated] Not used in the original scripts, deletes a specific news entry from an NPC's memory.
-/// @param npc NPC whose news entry should be deleted
-/// @param newsNumber ID number of the news entry to delete
-/// @return TRUE if the news was successfully deleted, FALSE otherwise
-func int Npc_DeleteNews(var C_NPC npc, var int newsNumber) {};
