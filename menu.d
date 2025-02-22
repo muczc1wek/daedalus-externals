@@ -1,3 +1,7 @@
+// Vanilla Menu externals with docu comments for DLS implementation
+//
+// Source: https://github.com/muczc1wek/daedalus-externals
+
 var instance instance_help;
 
 /// Updates `C_MENU_ITEM` choice box with the current setting
