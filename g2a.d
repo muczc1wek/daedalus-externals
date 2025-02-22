@@ -969,24 +969,18 @@ func int Npc_GetActiveSpellIsScroll(var C_NPC npc) {};
 /// @return level of the active spell
 func int Npc_GetActiveSpellLevel(var C_NPC npc) {};
 
-/// [deprecated] Sets some kind of spell info. Purpose is unclear.
-/// The name suggests it sets some properties for the active spell, but actual usage is not found in scripts.
-/// There are some remainings in the transformation spells.
-/// Based on engine code, it always returns FALSE.
+/// Sets the instance to which the NPC transforms into, durring the transformation spell
 ///
 /// @param npc instance of the NPC
-/// @param value unknown purpose
-/// @return always FALSE
-func int Npc_SetActiveSpellInfo(var C_NPC npc, var int value) {};
+/// @param instancename name of the instance the NPC transforms into
+/// @return nothing, external is wrongly defined as int
+func int Npc_SetActiveSpellInfo(var C_NPC npc, var int instancename) {};
 
 /// Gets the attitude of the NPC to another NPC (temp, perm, guild)
 ///
 /// @param self instance of the NPC
 /// @param other C_NPC instance of the other NPC
 /// @return int attitude value
-
-
-
 func int Npc_GetAttitude(var C_NPC self, var C_NPC other) {};
 
 /// TODO: Gets the body state of the NPC (returns BS_ constants)
