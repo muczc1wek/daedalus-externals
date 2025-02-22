@@ -950,23 +950,31 @@ func void Npc_ExchangeRoutine(var C_NPC self, var string routinename) {};
 /// @return spell ID, -1 if no active spell
 func int Npc_GetActiveSpell(var C_NPC npc) {};
 
-/// TODO: Gets the category of the active spell for the NPC
+/// Gets the category/type of the spell that the NPC currently has active
 ///
-/// @param self instance of the NPC
-/// @return int spell category
-func int Npc_GetActiveSpellCat(var C_NPC self) {};
+/// @param npc instance of the NPC to check
+/// @return category ID of the currently active spell
+func int Npc_GetActiveSpellCat(var C_NPC npc) {};
 
-/// TODO: Checks if the active spell is a scroll
+/// Checks if the spell currently active on the NPC's hand is from a scroll
 ///
-/// @param n0 instance of the NPC
-/// @return int result
-func int Npc_GetActiveSpellIsScroll(var instance n0) {};
+/// @param npc instance of the NPC to check
+/// @return TRUE if active spell is from a scroll, FALSE otherwise
+func int Npc_GetActiveSpellIsScroll(var C_NPC npc) {};
 
-/// TODO: Gets the level of the active spell for the NPC
+/// [deprecated] Not used in the original scripts, gets the level of the spell currently active on the NPC's hand
+/// although it is unknown what 'level' means
 ///
-/// @param self instance of the NPC
-/// @return int spell level
-func int Npc_GetActiveSpellLevel(var C_NPC self) {};
+/// @param npc instance of the NPC to check
+/// @return level of the active spell
+func int Npc_GetActiveSpellLevel(var C_NPC npc) {};
+
+/// Sets the instance to which the NPC transforms into, durring the transformation spell
+///
+/// @param npc instance of the NPC
+/// @param instancename name of the instance the NPC transforms into
+/// @return nothing, external is wrongly defined as int
+func int Npc_SetActiveSpellInfo(var C_NPC npc, var int instancename) {};
 
 /// Gets the attitude of the NPC to another NPC (temp, perm, guild)
 ///
