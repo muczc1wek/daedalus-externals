@@ -1298,13 +1298,12 @@ func void Npc_PercDisable(var C_NPC npc, var int percid) {};
 /// @param vic instance of the victim NPC
 func void Npc_SendPassivePerc(var C_NPC slf, var int percid, var C_NPC oth, var C_NPC vic) {};
 
-/// Sends a single perception to the `slf` (executes the perception function)
-/// Function is a bit weird, `slf` and `oth` are swapped in the function signature
+/// Sends a single perception to the `target` (executes the perception function)
 ///
-/// @param oth instance of the other NPC
-/// @param slf instance of the NPC
+/// @param sender instance of the other NPC
+/// @param target instance of the NPC
 /// @param percid perception ID
-func void Npc_SendSinglePerc(var C_NPC oth, var C_NPC slf, var int percid) {};
+func void Npc_SendSinglePerc(var C_NPC sender, var C_NPC target, var int percid) {};
 
 /// Checks if the NPC is dead
 ///
