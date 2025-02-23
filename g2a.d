@@ -2,6 +2,12 @@
 //
 // Source: https://github.com/muczc1wek/daedalus-externals
 
+// =========================================================
+//
+//  Global variables
+//
+// =========================================================
+
 var C_NPC hero;
 var C_NPC self;
 var C_NPC other;
@@ -1774,8 +1780,8 @@ func void TA_EndOverlay(var C_NPC npc) {};
 
 /// [deprecated] Not used in the original scripts, removes an active daily routine overlay
 ///
-/// @param self instance of the NPC
-func void TA_RemoveOverlay(var C_NPC self) {};
+/// @param npc instance of the NPC
+func void TA_RemoveOverlay(var C_NPC npc) {};
 
 
 // =========================================================

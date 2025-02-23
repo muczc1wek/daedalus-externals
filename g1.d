@@ -2,6 +2,12 @@
 //
 // Source: https://github.com/muczc1wek/daedalus-externals
 
+// =========================================================
+//
+//  Global variables
+//
+// =========================================================
+
 var C_NPC hero;
 var C_NPC self;
 var C_NPC other;
@@ -9,6 +15,13 @@ var C_NPC victim;
 var C_ITEM item;
 var instance NULL;
 var instance instance_help;
+
+
+// =========================================================
+//
+//  AI functions
+//
+// =========================================================
 
 /// TODO: Searches for a specific item (e.g., the golden sword of destruction, if available)
 ///
