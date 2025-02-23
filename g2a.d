@@ -12,7 +12,7 @@ var instance instance_help;
 
 /// Aims at the target with a ranged weapon (have to be drawn first)
 ///
-/// @param attacker C_NPC instance of the attacker
+/// @param attacker instance of the attacker
 /// @param target C_NPC instance of the target
 func void AI_AimAt(var C_NPC attacker, var C_NPC target) {};
 
@@ -110,35 +110,35 @@ func void AI_FinishingMove(var C_NPC attacker, var C_NPC target) {};
 /// @param npc instance of the NPC
 func void AI_Flee(var C_NPC npc) {};
 
-/// TODO: Finds a freepoint within a 20m radius of the NPC, moves there, and aligns accordingly
-/// Search criteria are similar to Wld_IsFPAvailable()
+/// Finds the nearest available freepoint near the NPC, moves there, and aligns accordingly
 ///
-/// @param self instance of the NPC
-/// @param fpname string name of the freepoint
-func void AI_GotoFP(var C_NPC self, var string fpname) {};
+/// @param npc instance of the NPC
+/// @param fpname name of the freepoint (could be only the middle part of the name: `FP_` + `fpname` + `_01`)
+func void AI_GotoFP(var C_NPC npc, var string fpname) {};
 
-/// TODO: NPC "self" goes to item "item"
+/// Finds an available freepoint within near the NPC (not the nearest one), moves there, and aligns accordingly
+/// Useful for NPCs that are already at the freepoint
 ///
-/// @param self instance of the NPC
-/// @param item C_ITEM instance of the item
-func void AI_GotoItem(var C_NPC self, var C_ITEM item) {};
+/// @param npc instance of the NPC
+/// @param fpname name of the freepoint (could be only the middle part of the name: `FP_` + `fpname` + `_01`)
+func void AI_GotoNextFP(var C_NPC npc, var string fpname) {};
 
-/// TODO: Similar to AI_GotoFP() but uses search criteria like Wld_IsNextFPAvailable()
+/// Makes the NPC go to the specified item
 ///
-/// @param self instance of the NPC
-/// @param fpname string name of the freepoint
-func void AI_GotoNextFP(var C_NPC self, var string fpname) {};
+/// @param npc instance of the NPC
+/// @param itm instance of the item
+func void AI_GotoItem(var C_NPC npc, var C_ITEM itm) {};
 
-/// NPC `slf` goes to NPC `oth`
+/// Makes `slf` go to `oth`
 ///
 /// @param slf instance of the NPC
 /// @param oth instance of the other NPC
 func void AI_GotoNpc(var C_NPC slf, var C_NPC oth) {};
 
-/// TODO: The NPC runs to the sound
+/// Makes NPC go to the source of the sound
 ///
-/// @param n0 instance of the NPC
-func void AI_GotoSound(var instance n0) {};
+/// @param npc instance of the NPC
+func void AI_GotoSound(var C_NPC npc) {};
 
 /// NPC goes to the specified waypoint
 ///
@@ -146,13 +146,13 @@ func void AI_GotoSound(var instance n0) {};
 /// @param wpname name of the waypoint
 func void AI_GotoWP(var C_NPC npc, var string wpname) {};
 
-/// NPC goes to the specified waypoint or any other object
+/// Makes NPC look at the target object (only head moves)
 ///
 /// @param npc instance of the NPC
-/// @param name name of the waypoint or object
-func void AI_LookAt(var C_NPC npc, var string name) {};
+/// @param target name of the object to look at
+func void AI_LookAt(var C_NPC npc, var string target) {};
 
-/// Makes `slf` looks at `oth`.
+/// Makes `slf` looks at `oth` (only head moves)
 ///
 /// @param slf instance of the NPC
 /// @param oth instance of the other NPC
@@ -184,13 +184,13 @@ func void AI_OutputSVM_Overlay(var C_NPC slf, var C_NPC oth, var string svmname)
 /// Plays an animation on the NPC
 ///
 /// @param npc instance of the NPC
-/// @param aniname name of the animation UPERCASE
+/// @param aniname name of the animation UPPERCASE
 func void AI_PlayAni(var C_NPC npc, var string aniname) {};
 
 /// Plays an animation on the NPC and sets its body state
 ///
 /// @param npc instance of the NPC
-/// @param aniname name of the animation UPERCASE
+/// @param aniname name of the animation UPPERCASE
 /// @param bodystate body state
 func void AI_PlayAniBS(var C_NPC npc, var string aniname, var int bodystate) {};
 
@@ -212,19 +212,19 @@ func void AI_PlayFX(var C_NPC origin, var instance target, var string effect) {}
 ///
 /// @param npc instance of the NPC
 /// @param effect name of the visual effect
-func void AI_StopFX(var C_NPC npc, var string s1) {};
+func void AI_StopFX(var C_NPC npc, var string effect) {};
 
-/// Points to a waypoint (provide waypoint name) or another object (provide object name)
+/// Makes NPC point at the target object
 ///
-/// @param self instance of the NPC
-/// @param name string name of the waypoint or object
-func void AI_PointAt(var C_NPC self, var string name) {};
+/// @param npc instance of the NPC
+/// @param name name of the waypoint or object
+func void AI_PointAt(var C_NPC npc, var string target) {};
 
-/// Points at another NPC
+/// Makes `slf` point with hand at `oth`
 ///
-/// @param self instance of the NPC
-/// @param other C_NPC instance of the other NPC
-func void AI_PointAtNpc(var C_NPC self, var C_NPC other) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+func void AI_PointAtNpc(var C_NPC slf, var C_NPC oth) {};
 
 /// Prints a message on the screen. The function is queued on `hero` AI queue. 
 ///
@@ -241,10 +241,11 @@ func int AI_PrintScreen(var string text, var int posx, var int posy, var string 
 /// @param npc instance of the NPC
 func void AI_ProcessInfos(var C_NPC npc) {};
 
-/// TODO: NPC briefly (2 seconds) looks at another NPC (only head moves)
+/// [deprecated] `T_QLOOK` animation is missing
+/// Makes `slf` looks at `oth` for 2 seconds (only head moves)
 ///
 /// @param slf instance of the NPC
-/// @param oth C_NPC instance of the other NPC
+/// @param oth instance of the other NPC
 func void AI_Quicklook(var C_NPC slf, var C_NPC oth) {};
 
 /// Draws the equipped melee weapon
@@ -271,8 +272,8 @@ func void AI_UnreadySpell(var C_NPC npc) {};
 
 /// Puts away the drawn weapon
 ///
-/// @param n0 instance of the NPC
-func void AI_RemoveWeapon(var instance n0) {};
+/// @param npc instance of the NPC
+func void AI_RemoveWeapon(var C_NPC npc) {};
 
 /// Sets all NPCs within a radius of x cm to the specified AI state
 ///
@@ -306,16 +307,16 @@ func void AI_Snd_Play(var C_NPC npc, var string sndName) {};
 /// @param sndName C_SFX instance name
 func void AI_Snd_Play3D(var C_NPC npc, var C_NPC origin, var string sndName) {};
 
-/// The NPC stands up from a sitting or lying position
+/// Makes NPC stand up from a sitting or lying position
 ///
-/// @param self instance of the NPC
-func void AI_StandUp(var C_NPC self) {};
+/// @param npc instance of the NPC
+func void AI_StandUp(var C_NPC npc) {};
 
-/// Similar to AI_StandUp(), but does not play transition animations and immediately pops to the default state
-/// Useful for urgent situations
+
+/// Makes NPC stand up from a sitting or lying position without playing transition animations
 ///
-/// @param self instance of the NPC
-func void AI_StandUpQuick(var C_NPC self) {};
+/// @param npc instance of the NPC
+func void AI_StandUpQuick(var C_NPC npc) {};
 
 /// Puts the NPC into the specified AI state (ZS_*)
 ///
@@ -330,26 +331,26 @@ func void AI_StartState(var C_NPC npc, var func state, var int statebehaviour, v
 /// @param npc instance of the NPC
 func void AI_StopAim(var C_NPC npc) {};
 
-/// Stops looking at a target and returns to the default forward gaze
+/// Makes npc stop looking at a target and returns to the default forward gaze
 ///
-/// @param self instance of the NPC
-func void AI_StopLookAt(var C_NPC self) {};
+/// @param npc instance of the NPC
+func void AI_StopLookAt(var C_NPC npc) {};
 
-/// Stops pointing at a target
+/// Makes the NPC stop pointing at the target
 ///
-/// @param self instance of the NPC
-func void AI_StopPointAt(var C_NPC self) {};
+/// @param npc instance of the NPC
+func void AI_StopPointAt(var C_NPC npc) {};
 
 /// Exits the dialog window of the NPC
 ///
 /// @param npc instance of the NPC
 func void AI_StopProcessInfos(var C_NPC npc) {};
 
-/// The NPC picks up the specified global item instance
+/// The NPC goes to the specified item and takes it
 ///
-/// @param self instance of the NPC
-/// @param item C_ITEM instance of the item
-func void AI_TakeItem(var C_NPC self, var C_ITEM item) {};
+/// @param npc instance of the NPC
+/// @param itm instance of the item
+func void AI_TakeItem(var C_NPC npc, var C_ITEM itm) {};
 
 /// [deprecated] Relic of the mob carrying system
 func void AI_TakeMob(var C_NPC npc, var string mobname) {};
@@ -363,22 +364,22 @@ func void AI_DropMob(var C_NPC npc) {};
 /// @param waypoint name of the waypoint or object to teleport to
 func void AI_Teleport(var C_NPC npc, var string waypoint) {};
 
-/// The NPC "self" turns away from the NPC "other"
+/// Makes `slf` turn away from `oth`
 ///
-/// @param n0 instance of the NPC
-/// @param n1 instance of the other NPC
-func void AI_TurnAway(var C_NPC n0, var C_NPC n1) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+func void AI_TurnAway(var C_NPC slf, var C_NPC oth) {};
 
-/// Turns to face the specified NPC
+/// Makes `slf` turn torwards `oth`
 ///
-/// @param n0 instance of the NPC
-/// @param n1 instance of the other NPC
-func void AI_TurnToNpc(var C_NPC n0, var C_NPC n1) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+func void AI_TurnToNpc(var C_NPC slf, var C_NPC oth) {};
 
-/// Turns to face the source of the sound
+/// Makes NPC turn to the source of the sound
 ///
-/// @param self instance of the NPC
-func void AI_TurnToSound(var C_NPC self) {};
+/// @param npc instance of the NPC
+func void AI_TurnToSound(var C_NPC npc) {};
 
 /// Unequips the current armor
 ///
@@ -427,19 +428,19 @@ func void AI_WaitMS(var C_NPC npc, var int timems) {};
 /// Makes `slf` wait until `oth` finishes its current AI command (does not work with AI overlays)
 ///
 /// @param slf instance of the NPC
-/// @param other C_NPC instance of the other NPC
+/// @param other instance of the other NPC
 func void AI_WaitTillEnd(var C_NPC slf, var C_NPC oth) {};
 
-/// Quickly turns to the other NPC
+/// TODO: Quickly turns to the other NPC
 ///
-/// @param self instance of the NPC
-/// @param other C_NPC instance of the other NPC
-func void AI_WhirlAround(var C_NPC self, var C_NPC other) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+func void AI_WhirlAround(var C_NPC slf, var C_NPC oth) {};
 
 /// TODO: Quickly turns to the source of a stimulus
 ///
-/// @param n0 instance of the NPC
-func void AI_WhirlAroundToSource(var instance n0) {};
+/// @param npc instance of the NPC
+func void AI_WhirlAroundToSource(var C_NPC npc) {};
 
 /// Concatenates two strings and returns the new string
 /// 
@@ -832,13 +833,6 @@ func void Mob_CreateItems(var string mobname, var int iteminstance, var int amou
 /// @return number of these items in the container
 func int Mob_HasItems(var string mobname, var int iteminstance) {};
 
-/// TODO: Gives valid information to the player and starts it if necessary
-///
-/// @param npc instance of the NPC
-/// @param important int importance level
-/// @return int 1 if information is given, 0 if not
-func int NPC_GiveInfo(var C_NPC npc, var int important) {};
-
 /// TODO: Checks if NPC1 can see an item
 ///
 /// @param npc1 C_NPC instance of the first NPC
@@ -888,6 +882,13 @@ func int Npc_CheckRunningMission(var C_NPC npc, var int important) {};
 /// @param important 1 to check for important information, 0 for unimportant
 /// @return TRUE if the NPC has information, FALSE otherwise
 func int Npc_CheckInfo(var C_NPC npc, var int important) {};
+
+/// Checks if the NPC has valid information (C_INFO) for the player, and if so, plays them
+///
+/// @param npc instance of the NPC
+/// @param important 1 to check for important information, 0 for unimportant
+/// @return TRUE if the NPC has information, FALSE otherwise
+func int NPC_GiveInfo(var C_NPC npc, var int important) {};
 
 /// Checks if the NPC knows the specified C_INFO
 ///
@@ -961,7 +962,7 @@ func int Npc_SetActiveSpellInfo(var C_NPC npc, var int instancename) {};
 ///
 /// @param slf instance of the NPC
 /// @param oth instance of the other NPC
-/// @return attitude value as ATT_ constants
+/// @return attitude value as `ATT_` constants
 func int Npc_GetAttitude(var C_NPC slf, var C_NPC oth) {};
 
 /// Gets the body state of the NPC (returns BS_ constants)
@@ -1076,17 +1077,17 @@ func int Npc_GetLastHitSpellCat(var C_NPC npc) {};
 /// @return ID of the last spell that hit the NPC, returns spell number that can be matched against spell definitions
 func int Npc_GetLastHitSpellID(var C_NPC npc) {};
 
-/// TODO: Gets the target the NPC is looking at
+/// Gets the NPC the `npc` is looking at
 ///
-/// @param n0 instance of the NPC
-/// @return instance target instance
-func instance Npc_GetLookAtTarget(var instance n0) {};
+/// @param npc instance of the NPC
+/// @return NPC the `npc` is looking at
+func C_NPC Npc_GetLookAtTarget(var C_NPC npc) {};
 
 /// Gets the nearest waypoint to the NPC
 ///
-/// @param self instance of the NPC
-/// @return string name of the nearest waypoint
-func string Npc_GetNearestWP(var C_NPC self) {};
+/// @param npc instance of the NPC
+/// @return name of the nearest waypoint
+func string Npc_GetNearestWP(var C_NPC npc) {};
 
 /// TODO: Gets the offender of a news event and returns a C_NPC instance
 ///
@@ -1109,17 +1110,11 @@ func C_NPC Npc_GetNewsVictim(var C_NPC self, var int newsnumber) {};
 /// @return C_NPC instance of the witness
 func C_NPC Npc_GetNewsWitness(var C_NPC self, var int newsnumber) {};
 
-/// TODO: Searches for a new target for the NPC. If a target is found, it is adopted as the internal target and written to 'other'
-///
-/// @param self instance of the NPC
-/// @return int 1 if a new target is found, 0 if not
-func int Npc_GetNextTarget(var C_NPC self) {};
-
 /// Gets the second nearest waypoint to the NPC
 ///
-/// @param self instance of the NPC
-/// @return string name of the second nearest waypoint
-func string Npc_GetNextWP(var C_NPC self) {};
+/// @param npc instance of the NPC
+/// @return name of the second nearest waypoint
+func string Npc_GetNextWP(var C_NPC npc) {};
 
 /// TODO: Gets the permanent attitude of the NPC to another NPC
 ///
@@ -1158,26 +1153,94 @@ func int Npc_GetStateTime(var C_NPC npc) {};
 /// @param timesec new state time in seconds
 func void Npc_SetStateTime(var C_NPC npc, var int timesec) {};
 
-/// TODO: Gets the talent skill of the NPC
+/// Gets the talent skill of the NPC (major talent value)
 ///
-/// @param n0 instance of the NPC
-/// @param i1 int talent ID
-/// @return int talent skill level
-func int Npc_GetTalentSkill(var instance n0, var int i1) {};
+/// @param npc instance of the NPC
+/// @param talent talent ID (`NPC_TALENT_` constants)
+/// @return skill value
+func int Npc_GetTalentSkill(var C_NPC npc, var int talent) {};
 
-/// TODO: Gets the talent value of the NPC
+/// Gets the talent value of the NPC (additional talent value)
 ///
-/// @param n0 instance of the NPC
-/// @param i1 int talent ID
-/// @return int talent value
-func int Npc_GetTalentValue(var instance n0, var int i1) {};
+/// @param npc instance of the NPC
+/// @param talent talent ID (`NPC_TALENT_` constants)
+/// @return talent value
+func int Npc_GetTalentValue(var C_NPC npc, var int talent) {};
 
-/// Sets the current target for the NPC
+/// Sets the talent skill of the NPC (major talent value)
 ///
-/// @param self instance of the NPC
-/// @param other C_NPC instance of the target NPC
-/// @return int 1 if successful, 0 if not
-func int Npc_SetTarget(var C_NPC self, var C_NPC other) {};
+/// @param npc instance of the NPC
+/// @param talent talent ID (`NPC_TALENT_` constants)
+/// @param value new skill value
+func void Npc_SetTalentSkill(var C_NPC npc, var int talent, var int value) {};
+
+/// Sets the talent value of the NPC (additional talent value)
+///
+/// @param npc instance of the NPC
+/// @param talent talent ID (`NPC_TALENT_` constants)
+/// @param value new talent value
+func void Npc_SetTalentValue(var C_NPC npc, var int talent, var int value) {};
+
+/// Checks if the NPC has equiped ranged weapon and ammo to use it
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC has ranged weapon with ammo, FALSE otherwise
+func int Npc_HasRangedWeaponWithAmmo(var C_NPC npc) {};
+
+/// Checks if the NPC has equiped any weapon
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC has equiped any weapon, FALSE otherwise
+func int Npc_HasEquippedWeapon(var C_NPC npc) {};
+
+/// Checks if the NPC has equiped melee weapon
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC has equiped melee weapon, FALSE otherwise
+func int Npc_HasEquippedMeleeWeapon(var C_NPC npc) {};
+
+/// Checks if the NPC has equiped ranged weapon
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC has equiped ranged weapon, FALSE otherwise
+func int Npc_HasEquippedRangedWeapon(var C_NPC npc) {};
+
+/// Checks if the NPC has equiped armor
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC has equiped armor, FALSE otherwise
+func int Npc_HasEquippedArmor(var C_NPC npc) {};
+
+/// Checks if the NPC has readied weapon
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC has readied weapon, FALSE otherwise
+func int Npc_HasReadiedWeapon(var C_NPC npc) {};
+
+/// Checks if the NPC has readied melee weapon
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC has readied melee weapon, FALSE otherwise
+func int Npc_HasReadiedMeleeWeapon(var C_NPC npc) {};
+
+/// Checks if the NPC has readied ranged weapon
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC has readied ranged weapon, FALSE otherwise
+func int Npc_HasReadiedRangedWeapon(var C_NPC npc) {};
+
+/// Checks if NPCs way is blocked (has enough space to move forward)
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the way is blocked, FALSE otherwise
+func int Npc_IsWayBlocked(var C_NPC npc) {};
+
+/// [deprecated] Relic of the cutscene system
+/// Checks if the NPC is in a cutscene
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC is in a cutscene, FALSE otherwise
+func int Npc_IsInCutscene(var C_NPC npc) {};
 
 /// Sets the teleport position for the NPC
 ///
@@ -1190,23 +1253,75 @@ func void Npc_SetTeleportPos(var C_NPC self) {};
 /// @param att int attitude value
 func void Npc_SetTempAttitude(var C_NPC self, var int att) {};
 
-/// TODO: Sets the NPC to fight mode with the specified weapon
-///
-/// @param self instance of the NPC
-/// @param weapon int weapon ID
-func void Npc_SetToFightMode(var C_NPC self, var int weapon) {};
-
-/// Sets the NPC to fist mode (e.g., for monsters)
-///
-/// @param self instance of the NPC
-func void Npc_SetToFistMode(var C_NPC self) {};
-
-/// TODO: Sets the true guild of the NPC
+/// Sets the NPC to fight mode with the specified weapon (weapon is created)
 ///
 /// @param npc instance of the NPC
-/// @param guildid int guild ID
-/// @return int result
-func int Npc_SetTrueGuild(var C_NPC npc, var int guildid) {};
+/// @param weapon instance name of the weapon
+func void Npc_SetToFightMode(var C_NPC npc, var int weapon) {};
+
+/// Sets the NPC to fist fight mode (no weapon) e.g. for monsters
+///
+/// @param npc instance of the NPC
+func void Npc_SetToFistMode(var C_NPC npc) {};
+
+/// Checks if `slf` and friends (we) are stronger than `oth` and friends (enemy)
+/// Calculeted based on the following formula:
+/// `enemiesLevel >= 2*weLevel`
+///
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @return TRUE if we are stronger, FALSE otherwise
+func int Npc_AreWeStronger(var C_NPC slf, var C_NPC oth) {};
+
+/// Checks if the NPC is currently talking
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC is talking, FALSE otherwise
+func int Npc_IsVoiceActive(var C_NPC npc) {};
+
+/// Checks if the NPC has a specified body flag
+///
+/// @param npc instance of the NPC
+/// @param flag body flag (`BS_FLAG_` constants)
+/// @return TRUE if the NPC has the flag, FALSE otherwise
+func int Npc_HasBodyFlag(var C_NPC npc, var int flag) {};
+
+/// Sets the current target for the NPC
+///
+/// @param npc instance of the NPC
+/// @param target instance of the new target
+func void Npc_SetTarget(var C_NPC npc, var C_NPC target) {};
+
+/// Sets global `other` to the target of the NPC
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the target is set successfully, FALSE otherwise
+func int Npc_GetTarget(var C_NPC npc) {};
+
+/// Searches for a target for the NPC. If a target is found, it is adopted as the internal target and written to 'other' global variable.
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the target is found, FALSE otherwise
+func int Npc_GetNextTarget(var C_NPC npc) {};
+
+/// Checks if target is available for the NPC, if so, it is adopted as the internal target.
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the target is available, FALSE otherwise
+func int Npc_IsNextTargetAvailable(var C_NPC npc) {};
+
+/// Sets the true guild of the NPC
+///
+/// @param npc instance of the NPC
+/// @param guild guild ID
+/// @return nothing, external is wrongly defined as int
+func int Npc_SetTrueGuild(var C_NPC npc, var int guild) {};
+
+/// Gets the true guild of the NPC
+///
+/// @param npc instance of the NPC
+/// @return true guild ID
+func int Npc_GetTrueGuild(var C_NPC npc) {};
 
 /// TODO: Starts item react modules for the NPC
 ///
@@ -1216,11 +1331,23 @@ func int Npc_SetTrueGuild(var C_NPC npc, var int guildid) {};
 /// @return int result
 func int Npc_StartItemReactModules(var C_NPC self, var C_NPC other, var C_ITEM item) {};
 
-/// TODO: Stops the animation for the specified instance
+/// Checks if the NPC is on the specified freepoint
 ///
-/// @param n0 instance of the instance
-/// @param s1 string name of the animation
-func void Npc_StopAni(var instance n0, var string s1) {};
+/// @param npc instance of the NPC
+/// @param fpname name of the freepoint (could be only the middle part of the name: `FP_` + `fpname` + `_01`)
+func int Npc_IsOnFP(var C_NPC npc, var string fpname) {};
+
+/// Makes the NPC play the specified animation
+///
+/// @param npc instance of the NPC
+/// @param aniname name of the animation UPPERCASE
+func void Npc_PlayAni(var C_NPC npc, var string aniname) {};
+
+/// Makes the NPC stop the specified animation
+///
+/// @param npc instance of the NPC
+/// @param aniname name of the animation UPPERCASE
+func void Npc_StopAni(var C_NPC npc, var string aniname) {};
 
 /// TODO: Checks if the NPC was in the specified state
 ///
@@ -1270,6 +1397,13 @@ func int Npc_RefuseTalk(var C_NPC npc) {};
 /// @param npc instance of the NPC
 /// @param timesec time in seconds
 func void Npc_SetRefuseTalk(var C_NPC npc, var int timesec) {};
+
+/// Checks if the NPC has a specified item in inventory
+///
+/// @param npc instance of the NPC
+/// @param iteminstance instance of the item
+/// @return amount of the item in inventory, 0 if not found
+func int Npc_HasItems(var C_NPC npc, var int iteminstance) {};
 
 /// [deprecated] Not used in the original scripts, the idea was that it created a news/memory entry that allows NPCs to track and react to witnessed events.
 /// NPCs to "remember" and react to events later.
