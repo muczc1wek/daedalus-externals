@@ -10,6 +10,13 @@ var C_ITEM item;
 var instance NULL;
 var instance instance_help;
 
+
+// =========================================================
+//
+//  AI functions
+//
+// =========================================================
+
 /// Aims at the target with a ranged weapon (have to be drawn first)
 ///
 /// @param attacker instance of the attacker
@@ -442,6 +449,37 @@ func void AI_WhirlAround(var C_NPC slf, var C_NPC oth) {};
 /// @param npc instance of the NPC
 func void AI_WhirlAroundToSource(var C_NPC npc) {};
 
+
+// =========================================================
+//
+//  Utility functions
+//
+// =========================================================
+
+/// Converts an integer to a float
+///
+/// @param x number to convert
+/// @return converted float
+func float IntToFloat(var int x) {};
+
+/// Converts an int to a string
+///
+/// @param x number to convert
+/// @return converted string
+func string IntToString(var int x) {};
+
+/// Converts a float to an int (cuts off the decimal part)
+///
+/// @param x float number to convert
+/// @return converted integer
+func int FloatToInt(var float x) {};
+
+/// Converts a float to a string with 6 decimal places
+///
+/// @param x float number to convert
+/// @return converted string
+func string FloatToString(var float x) {};
+
 /// Concatenates two strings and returns the new string
 /// 
 /// @param str1 first string
@@ -449,25 +487,65 @@ func void AI_WhirlAroundToSource(var C_NPC npc) {};
 /// @return concatenated string
 func string ConcatStrings(var string str1, var string str2) {};
 
-/// Adds the item to the NPC's inventory
+
+// =========================================================
+//
+//  HLP functions
+//
+// =========================================================
+
+/// [deprecated] Relic of the cutscene system
+func int Hlp_CutscenePlayed(var string csname) {};
+
+/// Returns the internal ID of an instance, usefull for comparison
+///
+/// @param inst any instance
+/// @return internal ID of the instance
+func int Hlp_GetInstanceID(var instance inst) {};
+
+/// Finds an NPC object by its instance name
+///
+/// @param instancename instance name of the NPC
+/// @return link to NPC object
+func C_NPC Hlp_GetNpc(var int instancename) {};
+
+/// Checks if item object is a specified instance
+///
+/// @param itm C_ITEM instance of the item
+/// @param instancename instance name of the item
+/// @return TRUE if the item is the specified instance, FALSE otherwise
+func int Hlp_IsItem(var C_ITEM itm, var int instancename) {};
+
+/// Checks if item is in the game world
+///
+/// @param itm instance of the item
+/// @return TRUE if the item is in the game world, FALSE otherwise
+func int Hlp_IsValidItem(var C_ITEM itm) {};
+
+/// Checks if the NPC exists in the game world
 ///
 /// @param npc instance of the NPC
-/// @param itm instance name of the item
-func void CreateInvItem(var C_NPC npc, var int itm) {};
+/// @return TRUE if the NPC exists, FALSE otherwise
+func int Hlp_IsValidNpc(var C_NPC npc) {};
 
-/// Adds the specified number of items to the NPC's inventory
+/// Generates a random value
 ///
-/// @param npc instance of the NPC
-/// @param itm instance name of the item
-/// @param ammount number of items to create
-func void CreateInvItems(var C_NPC npc, var int itm, var int ammount) {};
+/// @param bound maximum value
+/// @return random value form 0 to bound
+func int Hlp_Random(var int bound) {};
 
-
-/// Creates and equips the item to the NPC
+/// Compares two strings (not case-sensitive)
 ///
-/// @param npc instance of the NPC
-/// @param itm instance name of the item
-func void EquipItem(var C_NPC npc, var int itm) {};
+/// @param s1 first string
+/// @param s2 second string
+/// @return TRUE if the strings are equal, FALSE otherwise
+func int Hlp_StrCmp(var string s1, var string s2) {};
+
+// =========================================================
+//
+//  Doc functions
+//
+// =========================================================
 
 /// Creates a new instance of the document manager and returns its ID.
 ///
@@ -574,117 +652,12 @@ func void Doc_MapCoordinates(var string s0,
                              var float r7,
                              var float r8) {};
 
-/// Exits the game
-func void ExitGame() {};
 
-/// Exits the current session to the main menu
-func void ExitSession() {};
-
-/// Converts a float to an int (cuts off the decimal part)
-///
-/// @param x float number to convert
-/// @return converted integer
-func int FloatToInt(var float x) {};
-
-/// Converts a float to a string with 6 decimal places
-///
-/// @param x float number to convert
-/// @return converted string
-func string FloatToString(var float x) {};
-
-/// [deprecated]
-func void Game_InitEnglish() {};
-
-/// [deprecated] 
-func void Game_InitEngIntl() {};
-
-/// [deprecated]
-func void Game_InitGerman() {};
-
-/// [deprecated] Relic of the cutscene system
-func int Hlp_CutscenePlayed(var string csname) {};
-
-/// Returns the internal ID of an instance, usefull for comparison
-///
-/// @param inst any instance
-/// @return internal ID of the instance
-func int Hlp_GetInstanceID(var instance inst) {};
-
-/// Finds an NPC object by its instance name
-///
-/// @param instancename instance name of the NPC
-/// @return link to NPC object
-func C_NPC Hlp_GetNpc(var int instancename) {};
-
-/// Checks if item object is a specified instance
-///
-/// @param itm C_ITEM instance of the item
-/// @param instancename instance name of the item
-/// @return TRUE if the item is the specified instance, FALSE otherwise
-func int Hlp_IsItem(var C_ITEM itm, var int instancename) {};
-
-/// Checks if item is in the game world
-///
-/// @param itm instance of the item
-/// @return TRUE if the item is in the game world, FALSE otherwise
-func int Hlp_IsValidItem(var C_ITEM itm) {};
-
-/// Checks if the NPC exists in the game world
-///
-/// @param npc instance of the NPC
-/// @return TRUE if the NPC exists, FALSE otherwise
-func int Hlp_IsValidNpc(var C_NPC npc) {};
-
-/// Generates a random value
-///
-/// @param bound maximum value
-/// @return random value form 0 to bound
-func int Hlp_Random(var int bound) {};
-
-/// Compares two strings (not case-sensitive)
-///
-/// @param s1 first string
-/// @param s2 second string
-/// @return TRUE if the strings are equal, FALSE otherwise
-func int Hlp_StrCmp(var string s1, var string s2) {};
-
-/// Checks if the player finished the dialog
-///
-/// @return TRUE if the player finished the dialog, FALSE otherwise
-func int InfoManager_HasFinished() {};
-
-/// Adds a dialog choice to the specified C_INFO instance
-///
-/// @param dialog dialog instance
-/// @param text description of the choice
-/// @param fnc function to execute if the choice is selected
-func void Info_AddChoice(var C_INFO dialog, var string text, var func fnc) {};
-
-/// Clears the choices of the specified C_INFO instance
-///
-/// @param dialog dialog instance
-func void Info_ClearChoices(var C_INFO dialog) {};
-
-/// Converts an integer to a float
-///
-/// @param x number to convert
-/// @return converted float
-func float IntToFloat(var int x) {};
-
-/// Converts an int to a string
-///
-/// @param x number to convert
-/// @return converted string
-func string IntToString(var int x) {};
-
-/// Dipslays a new chapter window on the screen
-///
-/// @param chapter upper text (chapter number)
-/// @param text lower text (chapter title)
-/// @param texture back texture
-/// @param sound sound to play
-/// @param waittime apperance time in milliseconds
-func void IntroduceChapter(var string chapter, var string text, var string texture, var string sound, var int waittime) {};
+// =========================================================
+//
+//  Log functions
+//
+// =========================================================
 
 /// Creates a new log topic with the name `topicName` under the section `logSection`
 /// 
@@ -703,6 +676,13 @@ func void Log_AddEntry(var string topicName, var string entry) {};
 /// @param topicName unique string used to identify and name the topic
 /// @param status [LOG_RUNNING, LOG_SUCCESS, LOG_FAILED, LOG_OBSOLETE] the status to be set
 func void Log_SetTopicStatus(var string topicName, var int status) {};
+
+
+// =========================================================
+//
+//  MDL functions
+//
+// =========================================================
 
 /// Apply an animation overlay with `overlay_name` for the specified `npc`
 /// 
@@ -804,6 +784,94 @@ func void Mdl_ApplyRandomFaceAni(var c_npc npc,
                                  var float timemaxvar,
                                  var float probmin) {};
 
+
+// =========================================================
+//
+//  Dialog functions
+//
+// =========================================================
+
+/// Checks if the player finished the dialog
+///
+/// @return TRUE if the player finished the dialog, FALSE otherwise
+func int InfoManager_HasFinished() {};
+
+/// Adds a dialog choice to the specified C_INFO instance
+///
+/// @param dialog dialog instance
+/// @param text description of the choice
+/// @param fnc function to execute if the choice is selected
+func void Info_AddChoice(var C_INFO dialog, var string text, var func fnc) {};
+
+/// Clears the choices of the specified C_INFO instance
+///
+/// @param dialog dialog instance
+func void Info_ClearChoices(var C_INFO dialog) {};
+
+
+// =========================================================
+//
+//  Game functions
+//
+// =========================================================
+
+/// Dipslays a new chapter window on the screen
+///
+/// @param chapter upper text (chapter number)
+/// @param text lower text (chapter title)
+/// @param texture back texture
+/// @param sound sound to play
+/// @param waittime apperance time in milliseconds
+func void IntroduceChapter(var string chapter, var string text, var string texture, var string sound, var int waittime) {};
+
+/// Exits the game
+func void ExitGame() {};
+
+/// Exits the current session to the main menu
+func void ExitSession() {};
+
+/// Sets the range of passive perceptions for all NPCs
+///
+/// @param percid perception ID
+/// @param range range in cm
+func void Perc_SetRange(var int percid, var int range) {};
+
+/// Plays a video
+///
+/// @param filename name of the video file
+/// @return TRUE if the video was played successfully, FALSE otherwise
+func int PlayVideo(var string filename) {};
+
+/// Plays a video and allows to exit the session
+///
+/// @param filename name of the video file
+/// @param screenblend if TRUE, the screen will be blended out before the video is played
+/// @param exitsession if TRUE, the session will be exited after the video is played
+/// @return TRUE if the video was played successfully, FALSE otherwise
+func int PlayVideoEx(var string filename, var int screenblend, var int exitsession) {};
+
+/// [deprecated]
+func void Game_InitEnglish() {};
+
+/// [deprecated] 
+func void Game_InitEngIntl() {};
+
+/// [deprecated]
+func void Game_InitGerman() {};
+
+/// [deprecated]
+func void SetPercentDone(var int percentdone) {};
+
+/// [deprecated]
+func void Tal_Configure(var int talent, var int value) {};
+
+
+// =========================================================
+//
+//  MIS functions
+//
+// =========================================================
+
 /// [deprecated] Relic of the old mission system
 func void Mis_AddMissionEntry(var instance n0, var string s1) {};
 
@@ -819,6 +887,12 @@ func void Mis_RemoveMission(var instance n0) {};
 /// [deprecated] Relic of the old mission system
 func void Mis_SetStatus(var int missionname, var int newstatus) {};
 
+// =========================================================
+//
+//  MOB functions
+//
+// =========================================================
+
 /// Creates a specified number of items in a oCMobContainer
 ///
 /// @param mobname name of the oCMobContainer
@@ -832,6 +906,32 @@ func void Mob_CreateItems(var string mobname, var int iteminstance, var int amou
 /// @param iteminstance instance of the item
 /// @return number of these items in the container
 func int Mob_HasItems(var string mobname, var int iteminstance) {};
+
+
+// =========================================================
+//
+//  NPC functions
+//
+// =========================================================
+
+/// Adds the item to the NPC's inventory
+///
+/// @param npc instance of the NPC
+/// @param itm instance name of the item
+func void CreateInvItem(var C_NPC npc, var int itm) {};
+
+/// Adds the specified number of items to the NPC's inventory
+///
+/// @param npc instance of the NPC
+/// @param itm instance name of the item
+/// @param ammount number of items to create
+func void CreateInvItems(var C_NPC npc, var int itm, var int ammount) {};
+
+/// Creates and equips the item to the NPC
+///
+/// @param npc instance of the NPC
+/// @param itm instance name of the item
+func void EquipItem(var C_NPC npc, var int itm) {};
 
 /// TODO: Checks if NPC1 can see an item
 ///
@@ -1523,25 +1623,17 @@ func void Npc_SendSinglePerc(var C_NPC sender, var C_NPC target, var int percid)
 /// @return TRUE if the NPC is dead, FALSE otherwise
 func int Npc_IsDead(var C_NPC npc) {};
 
-/// Sets the range of passive perceptions for all NPCs
+/// Changes the current daily routine of the `self` to the specified new routine
 ///
-/// @param percid perception ID
-/// @param range range in cm
-func void Perc_SetRange(var int percid, var int range) {};
+/// @param oldroutine name of the old routine (have to be active)
+/// @param newroutine name of the new routine
+func void Rtn_Exchange(var string oldroutine, var string newroutine) {};
 
-/// Plays a video
-///
-/// @param filename name of the video file
-/// @return TRUE if the video was played successfully, FALSE otherwise
-func int PlayVideo(var string filename) {};
-
-/// Plays a video and allows to exit the session
-///
-/// @param filename name of the video file
-/// @param screenblend if TRUE, the screen will be blended out before the video is played
-/// @param exitsession if TRUE, the session will be exited after the video is played
-/// @return TRUE if the video was played successfully, FALSE otherwise
-func int PlayVideoEx(var string filename, var int screenblend, var int exitsession) {};
+// =========================================================
+//
+//  Print functions
+//
+// =========================================================
 
 /// Prints text at the top of the screen
 ///
@@ -1599,14 +1691,12 @@ func void PrintMulti(var string s0, var string s1, var string s2, var string s3,
 /// @param timesec display duration in seconds
 func void PrintScreen(var string text, var int posx, var int posy, var string font, var int timesec) {};
 
-/// Changes the current daily routine of the `self` to the specified new routine
-///
-/// @param oldroutine name of the old routine (have to be active)
-/// @param newroutine name of the new routine
-func void Rtn_Exchange(var string oldroutine, var string newroutine) {};
 
-/// deprecated
-func void SetPercentDone(var int percentdone) {};
+// =========================================================
+//
+//  Snd functions
+//
+// =========================================================
 
 /// Calculates the distance beetwen the npc and the source of the last played sound
 ///
@@ -1636,6 +1726,13 @@ func void Snd_Play(var string sndName) {};
 /// @param npc instance of the NPC
 /// @param sndName C_SFX instance name
 func void Snd_Play3D(var C_NPC npc, var string sndName) {};
+
+
+// =========================================================
+//
+//  TA functions
+//
+// =========================================================
 
 /// Sets the NPC daily routine
 ///
@@ -1680,8 +1777,12 @@ func void TA_EndOverlay(var C_NPC npc) {};
 /// @param self instance of the NPC
 func void TA_RemoveOverlay(var C_NPC self) {};
 
-/// [deprecated] Relic of the old talent system
-func void Tal_Configure(var int i0, var int i1) {};
+
+// =========================================================
+//
+//  WLD functions 
+//
+// =========================================================
 
 /// Assigns a room to a guild
 ///
