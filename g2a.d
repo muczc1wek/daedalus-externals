@@ -325,7 +325,6 @@ func void AI_Snd_Play3D(var C_NPC npc, var C_NPC origin, var string sndName) {};
 /// @param npc instance of the NPC
 func void AI_StandUp(var C_NPC npc) {};
 
-
 /// Makes NPC stand up from a sitting or lying position without playing transition animations
 ///
 /// @param npc instance of the NPC
