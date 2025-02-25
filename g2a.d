@@ -88,8 +88,8 @@ func void AI_DrawWeapon(var C_NPC npc) {};
 /// Drops the item with the specified item ID on the ground (works only in dialogs)
 ///
 /// @param npc instance of the NPC
-/// @param itemid int ID of the item to be dropped
-func void AI_DropItem(var C_NPC npc, var int itemid) {};
+/// @param iteminstance item instance name
+func void AI_DropItem(var C_NPC npc, var int iteminstance) {};
 
 /// Equips armor from the inventory
 ///
@@ -288,12 +288,12 @@ func void AI_UnreadySpell(var C_NPC npc) {};
 /// @param npc instance of the NPC
 func void AI_RemoveWeapon(var C_NPC npc) {};
 
-/// Sets all NPCs within a radius of x cm to the specified AI state
+/// Sets all NPCs within a radius of x cm to the specified ZS state
 ///
-/// @param self instance of the NPC
-/// @param aistatefunc function representing the AI state
-/// @param radius int radius in cm
-func void AI_SetNpcsToState(var C_NPC self, var func aistatefunc, var int radius) {};
+/// @param npc instance of the NPC
+/// @param state ZS state function
+/// @param radius radius in cm
+func void AI_SetNpcsToState(var C_NPC npc, var func state, var int radius) {};
 
 /// Specifies the walk mode (run, walk, sneak) of the NPC
 ///
@@ -444,13 +444,15 @@ func void AI_WaitMS(var C_NPC npc, var int timems) {};
 /// @param other instance of the other NPC
 func void AI_WaitTillEnd(var C_NPC slf, var C_NPC oth) {};
 
-/// TODO: Quickly turns to the other NPC
+/// [deprecated] `S_SURPRISE` animation is missing
+/// Makes `slf` quickly turn to `oth` and play a surprise animation
 ///
 /// @param slf instance of the NPC
 /// @param oth instance of the other NPC
 func void AI_WhirlAround(var C_NPC slf, var C_NPC oth) {};
 
-/// TODO: Quickly turns to the source of a stimulus
+/// [deprecated] `S_SURPRISE` animation is missing
+/// Makes NPC quickly turn to sound source and play a surprise animation
 ///
 /// @param npc instance of the NPC
 func void AI_WhirlAroundToSource(var C_NPC npc) {};
@@ -939,39 +941,39 @@ func void CreateInvItems(var C_NPC npc, var int itm, var int ammount) {};
 /// @param itm instance name of the item
 func void EquipItem(var C_NPC npc, var int itm) {};
 
-/// TODO: Checks if NPC1 can see an item
+/// Checks if NPC can see item, includes angle check
 ///
-/// @param npc1 C_NPC instance of the first NPC
-/// @param item C_ITEM instance of the item
-/// @return int 1 if can see, 0 if not
-func int Npc_CanSeeItem(var C_NPC npc1, var C_ITEM item) {};
+/// @param npc instance of the NPC
+/// @param itm instance of the item
+/// @return TRUE if can see, FALSE otherwise
+func int Npc_CanSeeItem(var C_NPC npc, var C_ITEM itm) {};
 
-/// Checks if NPC1 can see NPC2
+/// Checks if `slf` can see `oth`, includes angle check
 ///
-/// @param npc1 C_NPC instance of the first NPC
-/// @param npc2 C_NPC instance of the second NPC
-/// @return int 1 if can see, 0 if not
-func int Npc_CanSeeNpc(var C_NPC npc1, var C_NPC npc2) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @return TRUE if can see, FALSE otherwise
+func int Npc_CanSeeNpc(var C_NPC slf, var C_NPC oth) {};
 
-/// TODO: Checks if NPC can see another NPC without considering angle (line of sight check)
+/// Checks if `slf` can see `oth` without considering angle (line of sight check)
 ///
-/// @param self instance of the NPC
-/// @param other C_NPC instance of the other NPC
-/// @return int 1 if can see, 0 if not
-func int Npc_CanSeeNpcFreeLOS(var C_NPC self, var C_NPC other) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @return TRUE if can see, FALSE otherwise
+func int Npc_CanSeeNpcFreeLOS(var C_NPC slf, var C_NPC oth) {};
 
-/// TODO: Checks if NPC can see the source of a sound
+/// Checks if NPC can see the source of a sound, includes angle check
 ///
-/// @param self instance of the NPC
-/// @return int 1 if can see, 0 if not
-func int Npc_CanSeeSource(var C_NPC self) {};
+/// @param npc instance of the NPC
+/// @return TRUE if can see, FALSE otherwise
+func int Npc_CanSeeSource(var C_NPC npc) {};
 
 /// Changes the value of an attribute for the NPC
 ///
-/// @param self instance of the NPC
-/// @param atr int attribute to change
-/// @param value int value to change by
-func void Npc_ChangeAttribute(var C_NPC self, var int atr, var int value) {};
+/// @param npc instance of the NPC
+/// @param attribute attribute to change (`ATR_` constants)
+/// @param value value to change by
+func void Npc_ChangeAttribute(var C_NPC npc, var int attribute, var int value) {};
 
 /// [deprecated] Relic of the old mission system
 func int Npc_CheckAvailableMission(var C_NPC npc, var int missionstate, var int important) {};
@@ -981,6 +983,19 @@ func int Npc_CheckOfferMission(var C_NPC npc, var int important) {};
 
 /// [deprecated] Relic of the old mission system
 func int Npc_CheckRunningMission(var C_NPC npc, var int important) {};
+
+/// Checks if the NPC knows the player (must be set by `Npc_SetKnowsPlayer`)
+///
+/// @param npc instance of the NPC
+/// @param player instance of the player
+/// @return TRUE if the NPC knows the player, FALSE otherwise
+func int Npc_KnowsPlayer(var C_NPC npc, var C_NPC player) {};
+
+/// Sets the NPC to know the player
+///
+/// @param npc instance of the NPC
+/// @param player instance of the player
+func void Npc_SetKnowsPlayer(var C_NPC npc, var C_NPC player) {};
 
 /// Checks if the NPC has valid information (C_INFO) for the player
 ///
@@ -1013,11 +1028,17 @@ func void Npc_ClearAIQueue(var C_NPC npc) {};
 /// @param npc instance of the NPC
 func void Npc_ClearInventory(var C_NPC npc) {};
 
-/// TODO: Assigns a spell to the NPC but it cannot be used yet (appears grayed out in the selection circle)
+/// [deprecated] Supposed to add spell the mag book
 ///
 /// @param self instance of the NPC
-/// @param spellnr int spell number
-func void Npc_CreateSpell(var C_NPC self, var int spellnr) {};
+/// @param spellnr spell number
+func void Npc_CreateSpell(var C_NPC npc, var int spellnr) {};
+
+/// [deprecated] Supposed to add spell to the mag book if NPC doesn't know it
+///
+/// @param npc instance of the NPC
+/// @param spellnr spell number
+func void Npc_LearnSpell(var C_NPC npc, var int spellnr) {};
 
 /// Checks if the NPC has a specified spell in inventory
 ///
@@ -1026,11 +1047,11 @@ func void Npc_CreateSpell(var C_NPC self, var int spellnr) {};
 /// @return TRUE if the NPC has the spell, FALSE otherwise
 func int Npc_HasSpell(var C_NPC npc, var int spellid) {};
 
-/// Exchanges multiple daily routines for the NPC
+/// Exchanges the NPC's daily routine
 ///
-/// @param self instance of the NPC
-/// @param routinename string name of the routine
-func void Npc_ExchangeRoutine(var C_NPC self, var string routinename) {};
+/// @param npc instance of the NPC
+/// @param routine name of the new routine
+func void Npc_ExchangeRoutine(var C_NPC npc, var string routine) {};
 
 /// Returns the active spell for the NPC (self or other)
 ///
@@ -1068,13 +1089,20 @@ func int Npc_SetActiveSpellInfo(var C_NPC npc, var int instancename) {};
 ///
 /// @param slf instance of the NPC
 /// @param oth instance of the other NPC
-/// @return attitude value as `ATT_` constants
+/// @return attitude value (`ATT_` constants)
 func int Npc_GetAttitude(var C_NPC slf, var C_NPC oth) {};
 
-/// Gets the body state of the NPC (returns BS_ constants)
+/// Gets the permanent attitude of the `slf` towards the `oth`
+///
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @return permanent attitude value (`ATT_` constants)
+func int Npc_GetPermAttitude(var C_NPC slf, var C_NPC oth) {};
+
+/// Gets the body state of the NPC
 ///
 /// @param npc instance of the NPC
-/// @return current body state
+/// @return current body state (`BS_` constants)
 func int Npc_GetBodyState(var C_NPC npc) {};
 
 /// Gets the number of NPCs with the same guild as `npc` within `PERC_ASSESSENEMY` range
@@ -1083,38 +1111,52 @@ func int Npc_GetBodyState(var C_NPC npc) {};
 /// @return number of NPCs with the same guild within range
 func int Npc_GetComrades(var C_NPC npc) {};
 
-/// TODO: Gets the schema name of the MOB detected by the NPC
+/// Gets the schema name of the MOB used by the NPC
 ///
-/// @param self instance of the NPC
-/// @return string schema name
-func string Npc_GetDetectedMob(var C_NPC self) {};
+/// @param npc instance of the NPC
+/// @return schema name of the MOB (e.g. `BEDHIGH`)
+func string Npc_GetDetectedMob(var C_NPC npc) {};
+
+/// Checks if MOB used by `slf` is owned by `oth`
+///
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @return TRUE if the MOB is owned by the other NPC, FALSE otherwise
+func int Npc_IsDetectedMobOwnedByNpc(var C_NPC slf, var C_NPC oth) {};
+
+/// Checks if MOB used by `npc` is owned by the guild
+///
+/// @param npc instance of the NPC
+/// @param guild guild ID
+/// @return TRUE if the MOB is owned by the guild, FALSE otherwise
+func int Npc_IsDetectedMobOwnedByGuild(var C_NPC npc, var int guild) {};
 
 /// Gets the distance between the NPC and an item (in cm)
 ///
 /// @param npc instance of the NPC
-/// @param item C_ITEM instance of the item
-/// @return int distance in cm
-func int Npc_GetDistToItem(var C_NPC npc, var C_ITEM item) {};
+/// @param itm instance of the item
+/// @return distance between NPC and item in cm
+func int Npc_GetDistToItem(var C_NPC npc, var C_ITEM itm) {};
 
 /// Gets the distance between two NPCs (in cm)
 ///
-/// @param npc1 C_NPC instance of the first NPC
-/// @param npc2 C_NPC instance of the second NPC
-/// @return int distance in cm
-func int Npc_GetDistToNpc(var C_NPC npc1, var C_NPC npc2) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @return distance between NPCs in cm
+func int Npc_GetDistToNpc(var C_NPC slf, var C_NPC oth) {};
 
-/// TODO: Gets the distance between the NPC and the player (in cm)
+/// Gets the distance between the NPC and the player (in cm)
 ///
-/// @param npc1 instance of the NPC
-/// @return int distance in cm
-func int Npc_GetDistToPlayer(var C_NPC npc1) {};
+/// @param npc instance of the NPC
+/// @return distance between NPC and player in cm
+func int Npc_GetDistToPlayer(var C_NPC npc) {};
 
 /// Gets the distance between the NPC and a waypoint (in cm)
 ///
-/// @param self instance of the NPC
-/// @param wpname string name of the waypoint
-/// @return int distance in cm
-func int Npc_GetDistToWP(var C_NPC self, var string wpname) {};
+/// @param npc instance of the NPC
+/// @param wpname name of the waypoint
+/// @return distance between NPC and waypoint in cm
+func int Npc_GetDistToWP(var C_NPC npc, var string wpname) {};
 
 /// Gets the equipped armor of the NPC
 ///
@@ -1142,34 +1184,49 @@ func C_ITEM Npc_GetEquippedRangedWeapon(var C_NPC npc) {};
 /// @return attitude value between the guilds of the two NPCs
 func int Npc_GetGuildAttitude(var C_NPC slf, var C_NPC oth) {};
 
-/// TODO: Gets the height difference between the NPC and an item (in cm)
+/// Gets the height difference between the NPC and an item (in cm)
 ///
-/// @param n0 instance of the NPC
-/// @param n1 instance of the item
-/// @return int height difference in cm
-func int Npc_GetHeightToItem(var instance n0, var instance n1) {};
+/// @param npc instance of the NPC
+/// @param itm instance of the item
+/// @return height difference between NPC and item in cm
+func int Npc_GetHeightToItem(var C_NCP npc, var C_ITEM itm) {};
 
 /// Gets the height difference between two NPCs (in cm)
 ///
-/// @param npc1 C_NPC instance of the first NPC
-/// @param npc2 C_NPC instance of the second NPC
-/// @return int height difference in cm
-func int Npc_GetHeightToNpc(var C_NPC npc1, var C_NPC npc2) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @return height difference between NPCs in cm
+func int Npc_GetHeightToNpc(var C_NPC slf, var C_NPC oth) {};
 
-/// Gets the inventory item of the NPC by item instance
+/// Checks if the NPC has an item in its inventory, sets the global `item` to the item if found
 ///
-/// @param self instance of the NPC
-/// @param iteminstance int instance ID of the item
-/// @return C_ITEM instance of the item
-func C_ITEM Npc_GetInvItem(var C_NPC self, var int iteminstance) {};
+/// @param npc instance of the NPC
+/// @param iteminstance instance name of the item
+/// @return TRUE if the NPC has the item, FALSE otherwise
+func int Npc_GetInvItem(var C_NPC npc, var int iteminstance) {};
 
-/// TODO: Gets the inventory item of the NPC by slot
+/// Checks if the NPC has an item in slot, sets the global `item` to the item if found
 ///
-/// @param self instance of the NPC
-/// @param category int category of the item
-/// @param slotnr int slot number
-/// @return int number of items in the slot
-func int Npc_GetInvItemBySlot(var C_NPC self, var int category, var int slotnr) {};
+/// @param npc instance of the NPC
+/// @param category category of the item
+/// @param slotnr slot number
+/// @return TRUE if the NPC has the item, FALSE otherwise
+func int Npc_GetInvItemBySlot(var C_NPC npc, var int category, var int slotnr) {};
+
+/// Removes the item from the NPC's inventory
+///
+/// @param npc instance of the NPC
+/// @param iteminstance instance name of the item
+/// @return TRUE if the item was removed, FALSE otherwise
+func int Npc_RemoveInvItem(var C_NPC npc, var int iteminstance) {};
+
+/// Removes the specified number of items from the NPC's inventory
+///
+/// @param npc instance of the NPC
+/// @param iteminstance instance name of the item
+/// @param ammount number of items to remove
+/// @return TRUE if the items were removed, FALSE otherwise
+func int Npc_RemoveInvItems(var C_NPC npc, var int iteminstance, var int ammount) {};
 
 /// Gets the category of the last spell that hit/affected this NPC.
 ///
@@ -1195,39 +1252,11 @@ func C_NPC Npc_GetLookAtTarget(var C_NPC npc) {};
 /// @return name of the nearest waypoint
 func string Npc_GetNearestWP(var C_NPC npc) {};
 
-/// TODO: Gets the offender of a news event and returns a C_NPC instance
-///
-/// @param self instance of the NPC
-/// @param newsnumber int news number
-/// @return C_NPC instance of the offender
-func C_NPC Npc_GetNewsOffender(var C_NPC self, var int newsnumber) {};
-
-/// TODO: Gets the victim of a news event and returns a C_NPC instance
-///
-/// @param self instance of the NPC
-/// @param newsnumber int news number
-/// @return C_NPC instance of the victim
-func C_NPC Npc_GetNewsVictim(var C_NPC self, var int newsnumber) {};
-
-/// TODO: Gets the witness of a news event and returns a C_NPC instance
-///
-/// @param self instance of the NPC
-/// @param newsnumber int news number
-/// @return C_NPC instance of the witness
-func C_NPC Npc_GetNewsWitness(var C_NPC self, var int newsnumber) {};
-
 /// Gets the second nearest waypoint to the NPC
 ///
 /// @param npc instance of the NPC
 /// @return name of the second nearest waypoint
 func string Npc_GetNextWP(var C_NPC npc) {};
-
-/// TODO: Gets the permanent attitude of the NPC to another NPC
-///
-/// @param self instance of the NPC
-/// @param other C_NPC instance of the other NPC
-/// @return int permanent attitude value
-func int Npc_GetPermAttitude(var C_NPC self, var C_NPC other) {};
 
 /// Gets the guild assigned to the room (portal) the NPC is in
 ///
@@ -1348,16 +1377,31 @@ func int Npc_IsWayBlocked(var C_NPC npc) {};
 /// @return TRUE if the NPC is in a cutscene, FALSE otherwise
 func int Npc_IsInCutscene(var C_NPC npc) {};
 
-/// Sets the teleport position for the NPC
+/// Checks if `slf` is aiming at `oth`
 ///
-/// @param self instance of the NPC
-func void Npc_SetTeleportPos(var C_NPC self) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @return TRUE if the NPC is aiming, FALSE otherwise
+func int Npc_IsAiming(var C_NPC slf, var C_NPC oth) {};
 
-/// TODO: Sets the temporary attitude of the NPC to another NPC
+/// Cheks if NPC is in specified fight mode
 ///
-/// @param self instance of the NPC
-/// @param att int attitude value
-func void Npc_SetTempAttitude(var C_NPC self, var int att) {};
+/// @param npc instance of the NPC
+/// @param mode fight mode (`FMODE_` constants)
+/// @return TRUE if the NPC is in the fight mode, FALSE otherwise
+func int Npc_IsInFightMode(var C_NPC npc, var int mode) {};
+
+/// Sets the attitude of the NPC
+///
+/// @param npc instance of the NPC
+/// @param attitude attitude value (`ATT_` constants)
+func void Npc_SetAttitude(var C_NPC npc, var int attitude) {};
+
+/// Sets the temporary attitude of the NPC
+///
+/// @param npc instance of the NPC
+/// @param attitude attitude value (`ATT_` constants)
+func void Npc_SetTempAttitude(var C_NPC npc, var int attitude) {};
 
 /// Sets the NPC to fight mode with the specified weapon (weapon is created)
 ///
@@ -1429,13 +1473,23 @@ func int Npc_SetTrueGuild(var C_NPC npc, var int guild) {};
 /// @return true guild ID
 func int Npc_GetTrueGuild(var C_NPC npc) {};
 
-/// TODO: Starts item react modules for the NPC
+/// [deprecated] Relic of the old trade system
+/// Checks `slf` itemreact modules of the `itm` form `oth`
 ///
-/// @param self instance of the NPC
-/// @param other C_NPC instance of the other NPC
-/// @param item C_ITEM instance of the item
-/// @return int result
-func int Npc_StartItemReactModules(var C_NPC self, var C_NPC other, var C_ITEM item) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @param itm instance of the item
+/// @return TRUE if the itemreact modules are found, FALSE otherwise
+func int Npc_StartItemReactModules(var C_NPC slf, var C_NPC oth, var C_ITEM itm) {};
+
+/// [deprecated] Relic of the old trade system
+/// Checks `slf` offered `oth` the item
+///
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC (player)
+/// @param iteminstance instance name of the item
+/// @return TRUE if the itemreact modules are found, FALSE otherwise
+func int Npc_HasOffered(var C_NPC slf, var C_NPC oth, var int iteminstance) {};
 
 /// Checks if the NPC is on the specified freepoint
 ///
@@ -1455,12 +1509,46 @@ func void Npc_PlayAni(var C_NPC npc, var string aniname) {};
 /// @param aniname name of the animation UPPERCASE
 func void Npc_StopAni(var C_NPC npc, var string aniname) {};
 
-/// TODO: Checks if the NPC was in the specified state
+/// Checks if `oth` is within 5 meters from `slf`
 ///
-/// @param self instance of the NPC
-/// @param state func state function
-/// @return int 1 if true, 0 if not
-func int Npc_WasInState(var C_NPC self, var func state) {};
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @return TRUE if the NPC is near, FALSE otherwise
+func int Npc_IsNear(var C_NPC slf, var C_NPC oth) {};
+
+/// Checks if the NPC is a player
+///
+/// @param npc instance of the NPC
+/// @return TRUE if the NPC is a player, FALSE otherwise
+func int Npc_IsPlayer(var C_NPC npc) {};
+
+/// Checks if the NPC is in the specified ZS state
+///
+/// @param npc instance of the NPC
+/// @param state ZS state function
+/// @return TRUE if the NPC is in the state, FALSE otherwise
+func int Npc_IsInState(var C_NPC npc, var func state) {};
+
+/// Checks if the NPC was in the specified ZS state
+///
+/// @param npc instance of the NPC
+/// @param state ZS state function
+/// @return TRUE if the NPC was in the state, FALSE otherwise
+func int Npc_WasInState(var C_NPC npc, var func state) {};
+
+/// Checks if the NPC is in the specified routine ZS state
+///
+/// @param npc instance of the NPC
+/// @param state routine ZS state function
+/// @return TRUE if the NPC is in the state, FALSE otherwise
+func int Npc_IsInRoutine(var C_NPC npc, var func state) {};
+
+/// Checks if `slf` has detected `oth`
+///
+/// @param slf instance of the NPC
+/// @param oth instance of the other NPC
+/// @return TRUE if the NPC has detected the other NPC, FALSE otherwise
+func int Npc_HasDetectedNpc(var C_NPC slf, var C_NPC oth) {};
 
 /// Checks if the player was in the room (portal) of the NPC before the last room change
 ///
@@ -1629,6 +1717,16 @@ func void Npc_SendSinglePerc(var C_NPC sender, var C_NPC target, var int percid)
 /// @return TRUE if the NPC is dead, FALSE otherwise
 func int Npc_IsDead(var C_NPC npc) {};
 
+/// Takes the item from the `giver` inventory and gives it to the `taker`
+///
+/// @param giver instance of the giver NPC
+/// @param iteminstance instance name of the item
+/// @param taker instance of the taker NPC
+func void Npc_GiveItem(var C_NPC giver, var int iteminstance, var C_NPC taker) {};
+
+
+
+
 /// Changes the current daily routine of the `self` to the specified new routine
 ///
 /// @param oldroutine name of the old routine (have to be active)
@@ -1657,16 +1755,21 @@ func void PrintDebug(var string text) {};
 /// @param text debug text
 func void PrintDebugCh(var int channel, var string text) {};
 
-/// TODO: Prints text for the focused debug instance
+/// Prints text to zSpy if global `self` is on debug instances list 
+/// `debug focus` command can add instance to the list
+/// `debugAllInstances` in the `Gothic.ini` can enable all instances
 ///
 /// @param text string text to print
 func void PrintDebugInst(var string text) {};
 
-/// TODO: Prints text for a specific channel of the focused debug instance
+/// Prints text to zSpy if global `self` is on debug instances list on a specific debug channel (if channel is enabled)
+/// `debug focus` command can add instance to the list
+/// `debugAllInstances` in the `Gothic.ini` can enable all instances
 ///
-/// @param ch int channel number
+/// @param channel channel number
 /// @param text string text to print
-func void PrintDebugInstCh(var int ch, var string text) {};
+
+func void PrintDebugInstCh(var int channel, var string text) {};
 
 /// Displays a text in a dialog box
 ///
@@ -1679,14 +1782,14 @@ func void PrintDebugInstCh(var int ch, var string text) {};
 /// @return TRUE if the dialog was displayed successfully, FALSE otherwise
 func int PrintDialog(var int window, var string text, var int posx, var int posy, var string font, var int timesec) {};
 
-/// TODO: Prints a selection of texts to the screen
+/// Randomly selects one of the texts and prints it
 ///
-/// @param s0 string first text
-/// @param s1 string second text
-/// @param s2 string third text
-/// @param s3 string fourth text
-/// @param s4 string fifth text
-func void PrintMulti(var string s0, var string s1, var string s2, var string s3, var string s4) {};
+/// @param text1 first text
+/// @param text2 second text
+/// @param text3 third text
+/// @param text4 fourth text
+/// @param text5 fifth text
+func void PrintMulti(var string text1, var string text2, var string text3, var string text4, var string text5) {};
 
 /// Prints a message to the screen with specified font and position
 ///
@@ -1802,48 +1905,51 @@ func void Wld_AssignRoomToGuild(var string room, var int guild) {};
 /// @param owner instance of the room owner
 func void Wld_AssignRoomToNpc(var string room, var C_NPC owner) {};
 
-/// TODO: Detects an item with the specified flags and initializes the global variable 'item' with the found item
+/// Detects an item with the specified flags and initializes the global variable `item` with the found item
 ///
-/// @param self instance of the NPC
-/// @param flags int item flags
-/// @return int 1 if item is found, 0 if not
-func int Wld_DetectItem(var C_NPC self, var int flags) {};
+/// @param npc instance of the NPC
+/// @param flags item flags
+/// @return TRUE if the item is found, FALSE otherwise
+func int Wld_DetectItem(var C_NPC npc, var int flags) {};
 
-/// TODO: Detects an NPC based on instance name, guild, and AI state
+/// Detects an NPC based on instance name, guild and AI state
+/// Sets the global variable `other` to the detected NPC
 ///
-/// @param self instance of the NPC
-/// @param instance int instance name of the NPC
-/// @param aistate func AI state function
-/// @param guild int guild ID
-/// @return int 1 if NPC is found, 0 if not
-func int Wld_DetectNpc(var C_NPC self, var int instance, var func aistate, var int guild) {};
+/// @param npc instance of the detector NPC
+/// @param instancename instance name of the detected NPC (`-1` for any)
+/// @param state ZS state function of the detected NPC
+/// @param guild guild ID of the detected NPC (`-1` for any)
+/// @return TRUE if the NPC is detected, FALSE otherwise
+func int Wld_DetectNpc(var C_NPC npc, var int instancename, var func state, var int guild) {};
 
-/// TODO: Extended NPC detection
+/// Detects an NPC based on instance name, guild and AI state with oprion to ignore player
+/// Sets the global variable `other` to the detected NPC
 ///
-/// @param n0 instance of the first NPC
-/// @param i1 int parameter
-/// @param f2 func function
-/// @param i3 int parameter
-/// @param i4 int parameter
-/// @return int result
-func int Wld_DetectNpcEx(var instance n0, var int i1, var func f2, var int i3, var int i4) {};
+/// @param npc instance of the detector NPC
+/// @param instancename instance name of the detected NPC (-1 for any)
+/// @param state ZS state function of the detected NPC
+/// @param guild guild ID of the detected NPC (-1 for any)
+/// @param detectplayer `1` to detect player, `0` to ignore player
+/// @return TRUE if the NPC is detected, FALSE otherwise
+func int Wld_DetectNpcEx(var C_NPC npc, var int instancename, var func state, var int guild, var int detectplayer) {};
 
-/// TODO: Extended NPC detection with additional attributes
+/// Detects an NPC based on instance name, guild, AI state and attitude with oprion to ignore player
+/// Sets the global variable `other` to the detected NPC
 ///
-/// @param n0 instance of the first NPC
-/// @param i1 int parameter
-/// @param f2 func function
-/// @param i3 int parameter
-/// @param i4 int parameter
-/// @param i5 int additional parameter
-/// @return int result
-func int Wld_DetectNpcExAtt(var instance n0, var int i1, var func f2, var int i3, var int i4, var int i5) {};
+/// @param npc instance of the detector NPC
+/// @param instancename instance name of the detected NPC (-1 for any)
+/// @param state ZS state function of the detected NPC
+/// @param guild guild ID of the detected NPC (-1 for any)
+/// @param detectplayer `1` to detect player, `0` to ignore player
+/// @param attitude attitude of the detected NPC (`ATT_` constants)
+/// @return TRUE if the NPC is detected, FALSE otherwise
+func int Wld_DetectNpcExAtt(var C_NPC npc, var int instancename, var func state, var int guild, var int detectplayer, var int attitude) {};
 
-/// Checks if the player is near the NPC
+/// Checks if the player is detected by the NPC
 ///
-/// @param self instance of the NPC
-/// @return int 1 if player is near, 0 if not
-func int Wld_DetectPlayer(var C_NPC self) {};
+/// @param npc instance of the NPC
+/// @return TRUE if the player is detected, FALSE otherwise
+func int Wld_DetectPlayer(var C_NPC npc) {};
 
 /// Exchanges the guild attitude table
 ///
@@ -1900,40 +2006,26 @@ func void Wld_InsertNpcAndRespawn(var int instancename, var string spawnpoint, v
 /// @param spawnpoint name of the spawn point (waypoint or object)
 func void Wld_InsertObject(var string visual, var string spawnpoint) {};
 
-/// Checks if a free point is available within 20 meters of the NPC and is visible
+/// Checks if a free point near the NPC is available
 ///
-/// @param self instance of the NPC
-/// @param fpname string name of the free point
-/// @return int 1 if available, 0 if not
-func int Wld_IsFPAvailable(var C_NPC self, var string fpname) {};
+/// @param npc instance of the NPC
+/// @param fpname name of the freepoint (could be only the middle part of the name: `FP_` + `fpname` + `_01`)
+/// @return TRUE if the freepoint is available, FALSE otherwise
+func int Wld_IsFPAvailable(var C_NPC npc, var string fpname) {};
 
-/// TODO: Checks if a free point is available
+/// Checks if a MOB is available near the NPC and is unoccupied
 ///
-/// @param n0 instance of the NPC
-/// @param s1 string name of the free point
-/// @return int 1 if available, 0 if not
-func int Wld_IsFpAvailable(var instance n0, var string s1) {};
+/// @param npc instance of the NPC
+/// @param schemename name of the MOB schema (e.g. `BENCH`)
+/// @return TRUE if the MOB is available, FALSE otherwise
+func int Wld_IsMobAvailable(var C_NPC npc, var string schemename) {};
 
-/// Checks if a MOB is available within 10 meters of the NPC and is unoccupied
+/// Checks if the next free point is available
 ///
-/// @param self instance of the NPC
-/// @param schemename string name of the schema
-/// @return int 1 if available, 0 if not
-func int Wld_IsMobAvailable(var C_NPC self, var string schemename) {};
-
-/// Checks if the next free point is available and is visible
-///
-/// @param self instance of the NPC
-/// @param fpname string name of the free point
-/// @return int 1 if available, 0 if not
-func int Wld_IsNextFPAvailable(var C_NPC self, var string fpname) {};
-
-/// TODO: Checks if the next free point is available
-///
-/// @param n0 instance of the NPC
-/// @param s1 string name of the free point
-/// @return int 1 if available, 0 if not
-func int Wld_IsNextFpAvailable(var instance n0, var string s1) {};
+/// @param npc instance of the NPC
+/// @param fpname name of the freepoint (could be only the middle part of the name: `FP_` + `fpname` + `_01`)
+/// @return TRUE if the next freepoint is available, FALSE otherwise
+func int Wld_IsNextFPAvailable(var C_NPC npc, var string fpname) {};
 
 /// Checks if it is raining
 ///
@@ -1986,12 +2078,19 @@ func void Wld_SendTrigger(var string vobname) {};
 /// @param vobname name of the VOB
 func void Wld_SendUntrigger(var string vobname) {};
 
-/// Sets the guild attitude to a specified value
+/// Sets the guild attitude value between two guilds. Used for monster guilds as human guilds use attitude table
 ///
-/// @param guild1 int ID of the first guild
-/// @param attitude int attitude value
-/// @param guild2 int ID of the second guild
+/// @param guild1 ID of the first guild
+/// @param attitude attitude value (`ATT_` constants)
+/// @param guild2 ID of the second guild
 func void Wld_SetGuildAttitude(var int guild1, var int attitude, var int guild2) {};
+
+/// Gets the guild attitude value between two guilds. 
+///
+/// @param guild1 ID of the first guild
+/// @param guild2 ID of the second guild
+/// @return attitude value as `ATT_` constant
+func int Wld_GetGuildAttitude(var int guild1, var int guild2) {};
 
 /// Sets a daily routine for the object, the Trigger/Untrigger message is sent if it is later than the specified time
 ///
@@ -2022,3 +2121,9 @@ func void Wld_SetTime(var int hour, var int min) {};
 /// @param num number of NPCs to spawn
 /// @param range spawn range in cm
 func void Wld_SpawnNpcRange(var C_NPC npc, var int instancename, var int num, var float range) {};
+
+/// Gets the state of the MOB used by the NPC
+///
+/// @param npc instance of the NPC
+/// @param schemename name of the schema (e.g. `BENCH`)
+func int Wld_GetMobState(var C_NPC npc, var string schemename) {};
