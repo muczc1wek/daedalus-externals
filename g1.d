@@ -533,7 +533,7 @@ func int Doc_Create() {};
 
 /// Create a new instance of the document manager with the arrow showing players position on the map and returns its ID.
 ///
-/// @return the ID of the document manager instance.
+/// @return the ID of the document manager instance
 func int Doc_CreateMap() {};
 
 /// Prints a line of `text` onto the document with `docID`, onto the `page`.
@@ -866,6 +866,7 @@ func int Mob_HasItems(var string mobname, var int iteminstance) {};
 
 /// Adds the item to the NPC's inventory
 ///
+/// @global item set to the created item
 /// @param npc instance of the NPC
 /// @param itm instance name of the item
 func void CreateInvItem(var C_NPC npc, var int itm) {};
@@ -1115,15 +1116,17 @@ func C_ITEM Npc_GetEquippedRangedWeapon(var C_NPC npc) {};
 /// @return attitude value between the guilds of the two NPCs
 func int Npc_GetGuildAttitude(var C_NPC slf, var C_NPC oth) {};
 
-/// Checks if the NPC has an item in its inventory, sets the global `item` to the item if found
+/// Checks if the NPC has an item in its inventory
 ///
+/// @global item set to the item if found
 /// @param npc instance of the NPC
 /// @param iteminstance instance name of the item
 /// @return TRUE if the NPC has the item, FALSE otherwise
 func int Npc_GetInvItem(var C_NPC npc, var int iteminstance) {};
 
-/// Checks if the NPC has an item in slot, sets the global `item` to the item if found
+/// Checks if the NPC has an item in slot
 ///
+/// @global item set to the item if found
 /// @param npc instance of the NPC
 /// @param category category of the item
 /// @param slotnr slot number
@@ -1329,14 +1332,16 @@ func int Npc_HasBodyFlag(var C_NPC npc, var int flag) {};
 /// @param target instance of the new target
 func void Npc_SetTarget(var C_NPC npc, var C_NPC target) {};
 
-/// Sets global `other` to the target of the NPC
+/// Gets the target of the NPC
 ///
+/// @global other set to the target of the NPC
 /// @param npc instance of the NPC
 /// @return TRUE if the target is set successfully, FALSE otherwise
 func int Npc_GetTarget(var C_NPC npc) {};
 
-/// Searches for a target for the NPC. If a target is found, it is adopted as the internal target and written to 'other' global variable.
+/// Searches for a target for the NPC.
 ///
+/// @global other set to the target of the NPC if found
 /// @param npc instance of the NPC
 /// @return TRUE if the target is found, FALSE otherwise
 func int Npc_GetNextTarget(var C_NPC npc) {};
@@ -1760,7 +1765,7 @@ func void TA_RemoveOverlay(var C_NPC npc) {};
 ///
 /// @param room name of the room as defined in the portal
 /// @param guild guild ID
-func void Wld_AssignRoomToGuild(var string room, var int guild) {};
+func void AssignRoomToGuild(var string room, var int guild) {};
 
 /// Assigns a room to a specific NPC
 ///
@@ -1768,16 +1773,17 @@ func void Wld_AssignRoomToGuild(var string room, var int guild) {};
 /// @param owner instance of the room owner
 func void Wld_AssignRoomToNpc(var string room, var C_NPC owner) {};
 
-/// Detects an item with the specified flags and initializes the global variable `item` with the found item
+/// Detects an item with the specified flags
 ///
+/// @global item set to the item if detected
 /// @param npc instance of the NPC
 /// @param flags item flags
 /// @return TRUE if the item is found, FALSE otherwise
 func int Wld_DetectItem(var C_NPC npc, var int flags) {};
 
 /// Detects an NPC based on instance name, guild and AI state
-/// Sets the global variable `other` to the detected NPC
 ///
+/// @global other set to the detected NPC
 /// @param npc instance of the detector NPC
 /// @param instancename instance name of the detected NPC (`-1` for any)
 /// @param state ZS state function of the detected NPC
@@ -1786,8 +1792,8 @@ func int Wld_DetectItem(var C_NPC npc, var int flags) {};
 func int Wld_DetectNpc(var C_NPC npc, var int instancename, var func state, var int guild) {};
 
 /// Detects an NPC based on instance name, guild and AI state with oprion to ignore player
-/// Sets the global variable `other` to the detected NPC
 ///
+/// @global other set to the detected NPC
 /// @param npc instance of the detector NPC
 /// @param instancename instance name of the detected NPC (-1 for any)
 /// @param state ZS state function of the detected NPC
@@ -1798,6 +1804,7 @@ func int Wld_DetectNpcEx(var C_NPC npc, var int instancename, var func state, va
 
 /// Checks if the player is detected by the NPC
 ///
+/// @global other set to the detected player
 /// @param npc instance of the NPC
 /// @return TRUE if the player is detected, FALSE otherwise
 func int Wld_DetectPlayer(var C_NPC npc) {};
@@ -1840,6 +1847,7 @@ func void Wld_InsertItem(var int iteminstance, var string spawnpoint) {};
 
 /// Inserts an NPC into the world at the specified spawn point
 ///
+/// @global self set to the inserted NPC
 /// @param npcinstance instance ID of the NPC
 /// @param spawnpoint name of the spawn point (waypoint or object)
 func void Wld_InsertNpc(var int npcinstance, var string spawnpoint) {};
