@@ -49,7 +49,7 @@ func void AI_AskText(var C_NPC npc, var func funcyes, var func funcno, var strin
 func void AI_WaitForQuestion(var C_NPC npc, var func scriptfunc) {};
 
 /// Starts the combat AI (should be called in the ZS_Attack loop)
-/// Uses the internal target ised in `Npc_SetTarget()` and `Npc_GetNextTarget()`
+/// Uses the internal target that can be set by `Npc_SetTarget()` and `Npc_GetNextTarget()`
 ///
 /// @param npc instance of the NPC
 func void AI_Attack(var C_NPC npc) {};
@@ -439,8 +439,8 @@ func void AI_WaitMS(var C_NPC npc, var int timems) {};
 
 /// Makes `slf` wait until `oth` finishes its current AI command (does not work with AI overlays)
 ///
-/// @param slf instance of the NPC
-/// @param other instance of the other NPC
+/// @param slf instance of the waiting NPC
+/// @param oth instance of the NPC to wait for
 func void AI_WaitTillEnd(var C_NPC slf, var C_NPC oth) {};
 
 /// [deprecated] `S_SURPRISE` animation is missing
@@ -1604,7 +1604,6 @@ func void Npc_SetRefuseTalk(var C_NPC npc, var int timesec) {};
 func int Npc_HasItems(var C_NPC npc, var int iteminstance) {};
 
 /// [deprecated] Not used in the original scripts, the idea was that it created a news/memory entry that allows NPCs to track and react to witnessed events.
-/// NPCs to "remember" and react to events later.
 ///
 /// @param witness instance of the NPC who will receive this memory
 /// @param source type of the news/event
